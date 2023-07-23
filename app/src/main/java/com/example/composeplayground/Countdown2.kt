@@ -1,5 +1,10 @@
 package com.example.composeplayground
 
+import androidx.compose.ui.graphics.Color
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.runtime.remember
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.ui.Modifier
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.foundation.layout.Column
@@ -36,9 +41,29 @@ fun CountdownOutput() {
     var countdownKey by rememberSaveable { mutableStateOf(0) }
     var progressBar by rememberSaveable { mutableStateOf(1f) }
 
+    val progressAnimated by animateFloatAsState(
+        animationSpec = tween(1000),
+        targetValue = progressBar,
+        label = "alpha anim"
+    )
+
+    val animatedColor by animateColorAsState(
+        animationSpec = tween(1000),
+        targetValue = when (progressBar) {
+            1f -> Color.Green
+            0.8f -> Color.Blue
+            0.6f -> Color.Cyan
+            0.4f -> Color.Gray
+            0.2f -> Color.Magenta
+            else -> Color.Red
+        },
+        label = "color anim"
+    )
+
     CircularProgressIndicator(
         modifier = Modifier,
-        progress = progressBar
+        color = animatedColor,
+        progress = progressAnimated
     )
 
     LaunchedEffect(countdownKey) {
