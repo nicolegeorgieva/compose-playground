@@ -13,14 +13,14 @@ import androidx.compose.runtime.setValue
 @Composable
 fun Exercise() {
     Column {
-        var state by rememberSaveable { mutableStateOf("") }
+        var mainState by rememberSaveable { mutableStateOf("") }
 
-        Text(text = state)
+        Text(text = mainState)
 
         MagicButton(
-            state = state,
+            state = mainState,
             updateState = { newState ->
-                state = newState
+                mainState = newState
             }
         )
 
