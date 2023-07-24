@@ -32,110 +32,174 @@ fun StoneScissorsPaper() {
 
     Column(modifier = Modifier.padding(12.dp)) {
         // pre-start of the game
-        if (!pressedStart) {
-            Text("Stone Scissors Paper Game")
+        PreStart(state = pressedStart, updateState = {
+            pressedStart = true
+        })
+
+        // start of the game
+        // choose number of players
+        if (!selectedNumberOfPlayers) {
+            Text(text = "Choose number of players")
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Button(onClick = { pressedStart = true }) {
-                Text(text = "Start")
+            var numberOfPlayers by rememberSaveable { mutableStateOf(true) }
+
+            Row(
+                modifier = Modifier.selectableGroup(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                RadioButton(
+                    selected = numberOfPlayers,
+                    onClick = { numberOfPlayers = true },
+                    modifier = Modifier.semantics { contentDescription = "Option 1" },
+                    enabled = true
+                )
+
+                Text(text = "2")
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                RadioButton(
+                    selected = !numberOfPlayers,
+                    onClick = { numberOfPlayers = false },
+                    modifier = Modifier.semantics { contentDescription = "Option 2" },
+                    enabled = true
+                )
+
+                Text(text = "3")
             }
-            // start of the game
-        } else {
-            // choose number of players
-            if (!selectedNumberOfPlayers) {
-                Text(text = "Choose number of players")
 
-                Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-                var numberOfPlayers by rememberSaveable { mutableStateOf(true) }
-
-                Row(
-                    modifier = Modifier.selectableGroup(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    RadioButton(
-                        selected = numberOfPlayers,
-                        onClick = { numberOfPlayers = true },
-                        modifier = Modifier.semantics { contentDescription = "Option 1" },
-                        enabled = true
-                    )
-
-                    Text(text = "2")
-
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                    RadioButton(
-                        selected = !numberOfPlayers,
-                        onClick = { numberOfPlayers = false },
-                        modifier = Modifier.semantics { contentDescription = "Option 2" },
-                        enabled = true
-                    )
-
-                    Text(text = "3")
+            // selected first option - "2"
+            if (numberOfPlayers) {
+                Button(onClick = { selectedNumberOfPlayers = true }) {
+                    Text(text = "Continue")
                 }
+            } else {
+                Text(text = "Coming soon")
+            }
+
+            // set names of players
+        } else {
+            var player1Name by rememberSaveable { mutableStateOf("") }
+            var player2Name by rememberSaveable { mutableStateOf("") }
+
+            if (!selectedPlayersNames) {
+                Text(text = "Set names of players")
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // selected first option - "2"
-                if (numberOfPlayers) {
-                    Button(onClick = { selectedNumberOfPlayers = true }) {
+                TextField(
+                    value = player1Name,
+                    onValueChange = { player1Name = it },
+                    label = { Text("Player 1") }
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                TextField(
+                    value = player2Name,
+                    onValueChange = { player2Name = it },
+                    label = { Text("Player 2") }
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                if (player1Name.isNotBlank() && player2Name.isNotBlank()) {
+                    Button(onClick = { selectedPlayersNames = true }) {
                         Text(text = "Continue")
                     }
-                } else {
-                    Text(text = "Coming soon")
                 }
 
-                // set names of players
+                /*
+            Names of players are selected.
+            First player has to choose.
+             */
+
             } else {
-                var player1Name by rememberSaveable { mutableStateOf("") }
-                var player2Name by rememberSaveable { mutableStateOf("") }
+                var player1Choice by rememberSaveable { mutableStateOf("") }
+                var player1HasChosen by rememberSaveable { mutableStateOf(false) }
 
-                if (!selectedPlayersNames) {
-                    Text(text = "Set names of players")
+                var player2Choice by rememberSaveable { mutableStateOf("") }
+                var player2HasChosen by rememberSaveable { mutableStateOf(false) }
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                if (!player1HasChosen) {
+                    var stoneClicked by rememberSaveable { mutableStateOf(false) }
+                    var scissorsClicked by rememberSaveable { mutableStateOf(false) }
+                    var paperClicked by rememberSaveable { mutableStateOf(false) }
 
-                    TextField(
-                        value = player1Name,
-                        onValueChange = { player1Name = it },
-                        label = { Text("Player 1") }
-                    )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    TextField(
-                        value = player2Name,
-                        onValueChange = { player2Name = it },
-                        label = { Text("Player 2") }
-                    )
+                    Text(text = "$player1Name's turn")
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    if (player1Name.isNotBlank() && player2Name.isNotBlank()) {
-                        Button(onClick = { selectedPlayersNames = true }) {
+                    Row(
+                        modifier = Modifier.selectableGroup(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(
+                            selected = stoneClicked,
+                            onClick = {
+                                stoneClicked = true
+                                scissorsClicked = false
+                                paperClicked = false
+                                player1Choice = "Stone"
+                            },
+                            modifier = Modifier.semantics { contentDescription = "Stone" },
+                            enabled = true
+                        )
+
+                        Text(text = "Stone")
+
+                        Spacer(modifier = Modifier.width(8.dp))
+
+                        RadioButton(
+                            selected = scissorsClicked,
+                            onClick = {
+                                scissorsClicked = true
+                                stoneClicked = false
+                                paperClicked = false
+                                player1Choice = "Scissors"
+                            },
+                            modifier = Modifier.semantics { contentDescription = "Scissors" },
+                            enabled = true
+                        )
+
+                        Text(text = "Scissors")
+
+                        Spacer(modifier = Modifier.width(8.dp))
+
+                        RadioButton(
+                            selected = paperClicked,
+                            onClick = {
+                                paperClicked = true
+                                stoneClicked = false
+                                scissorsClicked = false
+                                player1Choice = "Paper"
+                            },
+                            modifier = Modifier.semantics { contentDescription = "Paper" },
+                            enabled = true
+                        )
+
+                        Text(text = "Paper")
+                    }
+
+                    // if an option is clicked a button "Continue" appears
+                    if (player1Choice.isNotBlank()) {
+                        Button(onClick = { player1HasChosen = true }) {
                             Text(text = "Continue")
                         }
                     }
 
-                    /*
-                    Names of players are selected.
-                    First player has to choose.
-                     */
-
+                    // Player 1 has chosen. Player 2 has to choose.
                 } else {
-                    var player1Choice by rememberSaveable { mutableStateOf("") }
-                    var player1HasChosen by rememberSaveable { mutableStateOf(false) }
-
-                    var player2Choice by rememberSaveable { mutableStateOf("") }
-                    var player2HasChosen by rememberSaveable { mutableStateOf(false) }
-
-                    if (!player1HasChosen) {
+                    if (!player2HasChosen) {
                         var stoneClicked by rememberSaveable { mutableStateOf(false) }
                         var scissorsClicked by rememberSaveable { mutableStateOf(false) }
                         var paperClicked by rememberSaveable { mutableStateOf(false) }
 
-                        Text(text = "$player1Name's turn")
+                        Text(text = "$player2Name's turn")
 
                         Spacer(modifier = Modifier.height(8.dp))
 
@@ -149,7 +213,7 @@ fun StoneScissorsPaper() {
                                     stoneClicked = true
                                     scissorsClicked = false
                                     paperClicked = false
-                                    player1Choice = "Stone"
+                                    player2Choice = "Stone"
                                 },
                                 modifier = Modifier.semantics { contentDescription = "Stone" },
                                 enabled = true
@@ -165,9 +229,11 @@ fun StoneScissorsPaper() {
                                     scissorsClicked = true
                                     stoneClicked = false
                                     paperClicked = false
-                                    player1Choice = "Scissors"
+                                    player2Choice = "Scissors"
                                 },
-                                modifier = Modifier.semantics { contentDescription = "Scissors" },
+                                modifier = Modifier.semantics {
+                                    contentDescription = "Scissors"
+                                },
                                 enabled = true
                             )
 
@@ -181,7 +247,7 @@ fun StoneScissorsPaper() {
                                     paperClicked = true
                                     stoneClicked = false
                                     scissorsClicked = false
-                                    player1Choice = "Paper"
+                                    player2Choice = "Paper"
                                 },
                                 modifier = Modifier.semantics { contentDescription = "Paper" },
                                 enabled = true
@@ -191,111 +257,53 @@ fun StoneScissorsPaper() {
                         }
 
                         // if an option is clicked a button "Continue" appears
-                        if (player1Choice.isNotBlank()) {
-                            Button(onClick = { player1HasChosen = true }) {
+                        if (player2Choice.isNotBlank()) {
+                            Button(onClick = { player2HasChosen = true }) {
                                 Text(text = "Continue")
                             }
                         }
-
-                        // Player 1 has chosen. Player 2 has to choose.
+                        // The two players have chosen. Now it's time to tell who is the winner.
                     } else {
-                        if (!player2HasChosen) {
-                            var stoneClicked by rememberSaveable { mutableStateOf(false) }
-                            var scissorsClicked by rememberSaveable { mutableStateOf(false) }
-                            var paperClicked by rememberSaveable { mutableStateOf(false) }
+                        var winnerName by rememberSaveable { mutableStateOf("") }
 
-                            Text(text = "$player2Name's turn")
-
-                            Spacer(modifier = Modifier.height(8.dp))
-
-                            Row(
-                                modifier = Modifier.selectableGroup(),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                RadioButton(
-                                    selected = stoneClicked,
-                                    onClick = {
-                                        stoneClicked = true
-                                        scissorsClicked = false
-                                        paperClicked = false
-                                        player2Choice = "Stone"
-                                    },
-                                    modifier = Modifier.semantics { contentDescription = "Stone" },
-                                    enabled = true
-                                )
-
-                                Text(text = "Stone")
-
-                                Spacer(modifier = Modifier.width(8.dp))
-
-                                RadioButton(
-                                    selected = scissorsClicked,
-                                    onClick = {
-                                        scissorsClicked = true
-                                        stoneClicked = false
-                                        paperClicked = false
-                                        player2Choice = "Scissors"
-                                    },
-                                    modifier = Modifier.semantics {
-                                        contentDescription = "Scissors"
-                                    },
-                                    enabled = true
-                                )
-
-                                Text(text = "Scissors")
-
-                                Spacer(modifier = Modifier.width(8.dp))
-
-                                RadioButton(
-                                    selected = paperClicked,
-                                    onClick = {
-                                        paperClicked = true
-                                        stoneClicked = false
-                                        scissorsClicked = false
-                                        player2Choice = "Paper"
-                                    },
-                                    modifier = Modifier.semantics { contentDescription = "Paper" },
-                                    enabled = true
-                                )
-
-                                Text(text = "Paper")
+                        when (player1Choice) {
+                            "Stone" -> winnerName = when (player2Choice) {
+                                "Stone" -> "Both"
+                                "Paper" -> player2Name
+                                else -> player1Name
                             }
 
-                            // if an option is clicked a button "Continue" appears
-                            if (player2Choice.isNotBlank()) {
-                                Button(onClick = { player2HasChosen = true }) {
-                                    Text(text = "Continue")
-                                }
-                            }
-                            // The two players have chosen. Now it's time to tell who is the winner.
-                        } else {
-                            var winnerName by rememberSaveable { mutableStateOf("") }
-
-                            when (player1Choice) {
-                                "Stone" -> winnerName = when (player2Choice) {
-                                    "Stone" -> "Both"
-                                    "Paper" -> player2Name
-                                    else -> player1Name
-                                }
-
-                                "Scissors" -> winnerName = when (player2Choice) {
-                                    "Scissors" -> "Both"
-                                    "Stone" -> player2Name
-                                    else -> player1Name
-                                }
-
-                                "Paper" -> winnerName = when (player2Choice) {
-                                    "Paper" -> "Both"
-                                    "Scissors" -> player2Name
-                                    else -> player1Name
-                                }
+                            "Scissors" -> winnerName = when (player2Choice) {
+                                "Scissors" -> "Both"
+                                "Stone" -> player2Name
+                                else -> player1Name
                             }
 
-                            Text(text = "The winner is: $winnerName. Congratulations!")
+                            "Paper" -> winnerName = when (player2Choice) {
+                                "Paper" -> "Both"
+                                "Scissors" -> player2Name
+                                else -> player1Name
+                            }
                         }
+
+                        Text(text = "The winner is: $winnerName. Congratulations!")
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+fun PreStart(
+    state: Boolean,
+    updateState: (Boolean) -> Unit
+) {
+    Text("Stone Scissors Paper Game")
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Button(onClick = { updateState(state) }) {
+        Text(text = "Start")
     }
 }
