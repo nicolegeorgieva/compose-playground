@@ -146,8 +146,10 @@ fun StoneScissorsPaper() {
                             RadioButton(
                                 selected = stoneClicked,
                                 onClick = {
-                                    player1Choice = "Stone"
                                     stoneClicked = true
+                                    scissorsClicked = false
+                                    paperClicked = false
+                                    player1Choice = "Stone"
                                 },
                                 modifier = Modifier.semantics { contentDescription = "Stone" },
                                 enabled = true
@@ -160,10 +162,10 @@ fun StoneScissorsPaper() {
                             RadioButton(
                                 selected = scissorsClicked,
                                 onClick = {
-                                    player1Choice = "Scissors"
+                                    scissorsClicked = true
                                     stoneClicked = false
                                     paperClicked = false
-                                    scissorsClicked = true
+                                    player1Choice = "Scissors"
                                 },
                                 modifier = Modifier.semantics { contentDescription = "Scissors" },
                                 enabled = true
@@ -176,10 +178,10 @@ fun StoneScissorsPaper() {
                             RadioButton(
                                 selected = paperClicked,
                                 onClick = {
-                                    player1Choice = "Paper"
                                     paperClicked = true
                                     stoneClicked = false
                                     scissorsClicked = false
+                                    player1Choice = "Paper"
                                 },
                                 modifier = Modifier.semantics { contentDescription = "Paper" },
                                 enabled = true
@@ -212,8 +214,10 @@ fun StoneScissorsPaper() {
                             RadioButton(
                                 selected = stoneClicked,
                                 onClick = {
-                                    player2Choice = "Stone"
                                     stoneClicked = true
+                                    scissorsClicked = false
+                                    paperClicked = false
+                                    player2Choice = "Stone"
                                 },
                                 modifier = Modifier.semantics { contentDescription = "Stone" },
                                 enabled = true
@@ -226,10 +230,10 @@ fun StoneScissorsPaper() {
                             RadioButton(
                                 selected = scissorsClicked,
                                 onClick = {
-                                    player2Choice = "Scissors"
                                     scissorsClicked = true
                                     stoneClicked = false
                                     paperClicked = false
+                                    player2Choice = "Scissors"
                                 },
                                 modifier = Modifier.semantics { contentDescription = "Scissors" },
                                 enabled = true
@@ -243,9 +247,9 @@ fun StoneScissorsPaper() {
                                 selected = paperClicked,
                                 onClick = {
                                     paperClicked = true
-                                    player2Choice = "Paper"
                                     stoneClicked = false
                                     scissorsClicked = false
+                                    player2Choice = "Paper"
                                 },
                                 modifier = Modifier.semantics { contentDescription = "Paper" },
                                 enabled = true
