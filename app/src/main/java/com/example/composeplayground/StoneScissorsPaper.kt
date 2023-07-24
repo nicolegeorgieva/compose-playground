@@ -272,17 +272,23 @@ fun StoneScissorsPaper() {
                             var winnerName by rememberSaveable { mutableStateOf("") }
 
                             when (player1Choice) {
-                                "Stone" -> if (player2Choice == "Stone") winnerName = "Both"
-                                else if (player2Choice == "Paper") winnerName = player2Name
-                                else winnerName = player1Name
+                                "Stone" -> winnerName = when (player2Choice) {
+                                    "Stone" -> "Both"
+                                    "Paper" -> player2Name
+                                    else -> player1Name
+                                }
 
-                                "Scissors" -> if (player2Choice == "Scissors") winnerName = "Both"
-                                else if (player2Choice == "Stone") winnerName = player2Name
-                                else winnerName = player1Name
+                                "Scissors" -> winnerName = when (player2Choice) {
+                                    "Scissors" -> "Both"
+                                    "Stone" -> player2Name
+                                    else -> player1Name
+                                }
 
-                                "Paper" -> if (player2Choice == "Paper") winnerName = "Both"
-                                else if (player2Choice == "Scissors") winnerName = player2Name
-                                else winnerName = player1Name
+                                "Paper" -> winnerName = when (player2Choice) {
+                                    "Paper" -> "Both"
+                                    "Scissors" -> player2Name
+                                    else -> player1Name
+                                }
                             }
 
                             Text(text = "The winner is: $winnerName. Congratulations!")
