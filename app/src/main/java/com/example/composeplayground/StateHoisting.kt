@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -22,6 +23,12 @@ fun Exercise() {
                 state = newState
             }
         )
+
+        val state2 = rememberSaveable { mutableStateOf("") }
+
+        Text(text = state2.value)
+
+        MagicButton2(state = state2)
     }
 }
 
@@ -34,5 +41,16 @@ fun MagicButton(
         updateState("$state Magic")
     }) {
         Text(text = "Magic")
+    }
+}
+
+@Composable
+fun MagicButton2(
+    state: MutableState<String>
+) {
+    Button(onClick = {
+        state.value += "Magic 2"
+    }) {
+        Text(text = "Magic 2")
     }
 }
