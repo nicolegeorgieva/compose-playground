@@ -31,7 +31,7 @@ fun MagicButton(
     updateState: (String) -> Unit
 ) {
     Button(onClick = {
-        updateState(" Magic")
+        updateState("$state Magic")
     }) {
         Text(text = "Magic")
     }
