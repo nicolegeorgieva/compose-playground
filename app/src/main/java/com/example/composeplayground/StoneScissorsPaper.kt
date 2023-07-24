@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.Button
@@ -29,7 +30,7 @@ fun StoneScissorsPaper() {
     var selectedNumberOfPlayers by rememberSaveable { mutableStateOf(false) }
     var selectedPlayersNames by rememberSaveable { mutableStateOf(false) }
 
-    Column {
+    Column(modifier = Modifier.padding(12.dp)) {
         // pre-start of the game
         if (!pressedStart) {
             Text("Stone Scissors Paper Game")
@@ -130,6 +131,10 @@ fun StoneScissorsPaper() {
                     var player2HasChosen by rememberSaveable { mutableStateOf(false) }
 
                     if (!player1HasChosen) {
+                        var stoneClicked by rememberSaveable { mutableStateOf(false) }
+                        var scissorsClicked by rememberSaveable { mutableStateOf(false) }
+                        var paperClicked by rememberSaveable { mutableStateOf(false) }
+
                         Text(text = "$player1Name's turn")
 
                         Spacer(modifier = Modifier.height(8.dp))
@@ -139,8 +144,11 @@ fun StoneScissorsPaper() {
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             RadioButton(
-                                selected = false,
-                                onClick = { player1Choice = "Stone" },
+                                selected = stoneClicked,
+                                onClick = {
+                                    player1Choice = "Stone"
+                                    stoneClicked = true
+                                },
                                 modifier = Modifier.semantics { contentDescription = "Stone" },
                                 enabled = true
                             )
@@ -150,8 +158,13 @@ fun StoneScissorsPaper() {
                             Spacer(modifier = Modifier.width(8.dp))
 
                             RadioButton(
-                                selected = false,
-                                onClick = { player1Choice = "Scissors" },
+                                selected = scissorsClicked,
+                                onClick = {
+                                    player1Choice = "Scissors"
+                                    stoneClicked = false
+                                    paperClicked = false
+                                    scissorsClicked = true
+                                },
                                 modifier = Modifier.semantics { contentDescription = "Scissors" },
                                 enabled = true
                             )
@@ -161,8 +174,13 @@ fun StoneScissorsPaper() {
                             Spacer(modifier = Modifier.width(8.dp))
 
                             RadioButton(
-                                selected = false,
-                                onClick = { player1Choice = "Paper" },
+                                selected = paperClicked,
+                                onClick = {
+                                    player1Choice = "Paper"
+                                    paperClicked = true
+                                    stoneClicked = false
+                                    scissorsClicked = false
+                                },
                                 modifier = Modifier.semantics { contentDescription = "Paper" },
                                 enabled = true
                             )
@@ -179,6 +197,10 @@ fun StoneScissorsPaper() {
 
                         // Player 1 has chosen. Player 2 has to choose.
                     } else {
+                        var stoneClicked by rememberSaveable { mutableStateOf(false) }
+                        var scissorsClicked by rememberSaveable { mutableStateOf(false) }
+                        var paperClicked by rememberSaveable { mutableStateOf(false) }
+
                         Text(text = "$player2Name's turn")
 
                         Spacer(modifier = Modifier.height(8.dp))
@@ -188,8 +210,11 @@ fun StoneScissorsPaper() {
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             RadioButton(
-                                selected = false,
-                                onClick = { player2Choice = "Stone" },
+                                selected = stoneClicked,
+                                onClick = {
+                                    player2Choice = "Stone"
+                                    stoneClicked = true
+                                },
                                 modifier = Modifier.semantics { contentDescription = "Stone" },
                                 enabled = true
                             )
@@ -199,8 +224,13 @@ fun StoneScissorsPaper() {
                             Spacer(modifier = Modifier.width(8.dp))
 
                             RadioButton(
-                                selected = false,
-                                onClick = { player2Choice = "Scissors" },
+                                selected = scissorsClicked,
+                                onClick = {
+                                    player2Choice = "Scissors"
+                                    scissorsClicked = true
+                                    stoneClicked = false
+                                    paperClicked = false
+                                },
                                 modifier = Modifier.semantics { contentDescription = "Scissors" },
                                 enabled = true
                             )
@@ -210,8 +240,13 @@ fun StoneScissorsPaper() {
                             Spacer(modifier = Modifier.width(8.dp))
 
                             RadioButton(
-                                selected = false,
-                                onClick = { player2Choice = "Paper" },
+                                selected = paperClicked,
+                                onClick = {
+                                    paperClicked = true
+                                    player2Choice = "Paper"
+                                    stoneClicked = false
+                                    scissorsClicked = false
+                                },
                                 modifier = Modifier.semantics { contentDescription = "Paper" },
                                 enabled = true
                             )
