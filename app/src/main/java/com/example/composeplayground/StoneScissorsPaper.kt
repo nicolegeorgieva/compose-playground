@@ -27,9 +27,10 @@ import androidx.compose.ui.unit.dp
 fun StoneScissorsPaper() {
     var pressedStart by rememberSaveable { mutableStateOf(false) }
     var selectedNumberOfPlayers by rememberSaveable { mutableStateOf(false) }
-    var selectedPlayer1Name by rememberSaveable { mutableStateOf(false) }
+    var selectedPlayersNames by rememberSaveable { mutableStateOf(false) }
 
     Column {
+        // pre-start of the game
         if (!pressedStart) {
             Text("Stone Scissors Paper Game")
 
@@ -38,7 +39,9 @@ fun StoneScissorsPaper() {
             Button(onClick = { pressedStart = true }) {
                 Text(text = "Start")
             }
+            // start of the game
         } else {
+            // choose number of players
             if (!selectedNumberOfPlayers) {
                 Text(text = "Choose number of players")
 
@@ -73,13 +76,18 @@ fun StoneScissorsPaper() {
 
                 Spacer(modifier = Modifier.height(8.dp))
 
+                // selected first option - "2"
                 if (numberOfPlayers) {
                     Button(onClick = { selectedNumberOfPlayers = true }) {
                         Text(text = "Continue")
                     }
+                } else {
+                    Text(text = "Coming soon")
                 }
+
+                // set names of players
             } else {
-                Text(text = "Set Player 1's name")
+                Text(text = "Set names of players")
 
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -93,11 +101,23 @@ fun StoneScissorsPaper() {
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                if (player1Name.isNotBlank()) {
-                    Button(onClick = { selectedPlayer1Name = true }) {
+                var player2Name by rememberSaveable { mutableStateOf("") }
+
+                TextField(
+                    value = player2Name,
+                    onValueChange = { player2Name = it },
+                    label = { Text("Player 2") }
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                if (player1Name.isNotBlank() && player2Name.isNotBlank()) {
+                    Button(onClick = { selectedPlayersNames = true }) {
                         Text(text = "Continue")
                     }
                 }
+
+                // begin game
             }
         }
     }
