@@ -37,7 +37,7 @@ fun StoneScissorsPaper() {
     var player1Name = rememberSaveable { mutableStateOf("") }
     var player2Name = rememberSaveable { mutableStateOf("") }
 
-    var player1Choice = rememberSaveable { mutableStateOf<Choice?>(null) }
+    var player1Choice by rememberSaveable { mutableStateOf<Choice?>(null) }
     var player1HasChosen by rememberSaveable { mutableStateOf(false) }
     var player2Choice by rememberSaveable { mutableStateOf<Choice?>(null) }
     var player2HasChosen by rememberSaveable { mutableStateOf(false) }
@@ -66,17 +66,19 @@ fun StoneScissorsPaper() {
         } else if (!player1HasChosen) {
             Player1Choice(
                 name1 = player1Name,
-                player1HasChosen = player1HasChosen,
-                stoneClicked = player1Choice.value == Choice.STONE,
-                scissorsClicked = player1Choice.value == Choice.SCISSORS,
-                paperClicked = player1Choice.value == Choice.PAPER,
-                onStoneClicked = { it ->
-
-
+                choice = player1Choice,
+                onStoneClicked = {
+                    player1Choice = Choice.STONE
                 },
-                onScissorsClicked:(Boolean) -> Unit,
-            onPaperClicked: (Boolean) -> Unit,
-            onPlayer1HasChosen: (Boolean) -> Unit)
+                onScissorsClicked = {
+                    player1Choice = Choice.SCISSORS
+                },
+                onPaperClicked = {
+                    player1Choice = Choice.PAPER
+                },
+                onPlayer1HasChosen = {
+                    player1HasChosen = true
+                })
         }
 
         // Player 1 has chosen. Player 2 has to choose.
@@ -279,14 +281,11 @@ fun SetNamesOfPlayers(
 @Composable
 fun Player1Choice(
     name1: MutableState<String>,
-    player1HasChosen: Boolean,
-    stoneClicked: Boolean,
-    scissorsClicked: Boolean,
-    paperClicked: Boolean,
-    onStoneClicked: (Boolean) -> Unit,
-    onScissorsClicked: (Boolean) -> Unit,
-    onPaperClicked: (Boolean) -> Unit,
-    onPlayer1HasChosen: (Boolean) -> Unit
+    choice: Choice?,
+    onStoneClicked: () -> Unit,
+    onScissorsClicked: () -> Unit,
+    onPaperClicked: () -> Unit,
+    onPlayer1HasChosen: () -> Unit
 ) {
     Text(text = "$name1's turn")
 
@@ -297,9 +296,9 @@ fun Player1Choice(
         verticalAlignment = Alignment.CenterVertically
     ) {
         RadioButton(
-            selected = stoneClicked,
+            selected = choice == Choice.STONE,
             onClick = {
-                onStoneClicked(stoneClicked)
+                onStoneClicked()
             },
             modifier = Modifier.semantics { contentDescription = "Stone" },
             enabled = true
@@ -310,9 +309,9 @@ fun Player1Choice(
         Spacer(modifier = Modifier.width(8.dp))
 
         RadioButton(
-            selected = scissorsClicked,
+            selected = choice == Choice.SCISSORS,
             onClick = {
-                onScissorsClicked(scissorsClicked)
+                onScissorsClicked()
             },
             modifier = Modifier.semantics { contentDescription = "Scissors" },
             enabled = true
@@ -323,9 +322,9 @@ fun Player1Choice(
         Spacer(modifier = Modifier.width(8.dp))
 
         RadioButton(
-            selected = paperClicked,
+            selected = choice == Choice.PAPER,
             onClick = {
-                onPaperClicked(paperClicked)
+                onPaperClicked()
             },
             modifier = Modifier.semantics { contentDescription = "Paper" },
             enabled = true
@@ -333,8 +332,9 @@ fun Player1Choice(
 
         Text(text = "Paper")
 
-        Button(onClick = { onPlayer1HasChosen(player1HasChosen) }) {
+        Button(onClick = { onPlayer1HasChosen() }) {
             Text(text = "Continue")
         }
     }
 }
+
