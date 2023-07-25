@@ -42,6 +42,8 @@ fun StoneScissorsPaper() {
     var player2Choice by rememberSaveable { mutableStateOf<Choice?>(null) }
     var player2HasChosen by rememberSaveable { mutableStateOf(false) }
 
+    var winnerName = rememberSaveable { mutableStateOf("") }
+
     Column(modifier = Modifier.padding(12.dp)) {
         // pre-start of the game
 
@@ -79,106 +81,33 @@ fun StoneScissorsPaper() {
                 onPlayer1HasChosen = {
                     player1HasChosen = true
                 })
-        }
-
-        // Player 1 has chosen. Player 2 has to choose.
-    } else {
-        if (!player2HasChosen) {
-            var stoneClicked by rememberSaveable { mutableStateOf(false) }
-            var scissorsClicked by rememberSaveable { mutableStateOf(false) }
-            var paperClicked by rememberSaveable { mutableStateOf(false) }
-
-            Text(text = "$player2Name's turn")
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Row(
-                modifier = Modifier.selectableGroup(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                RadioButton(
-                    selected = stoneClicked,
-                    onClick = {
-                        stoneClicked = true
-                        scissorsClicked = false
-                        paperClicked = false
-                        player2Choice = "Stone"
-                    },
-                    modifier = Modifier.semantics { contentDescription = "Stone" },
-                    enabled = true
-                )
-
-                Text(text = "Stone")
-
-                Spacer(modifier = Modifier.width(8.dp))
-
-                RadioButton(
-                    selected = scissorsClicked,
-                    onClick = {
-                        scissorsClicked = true
-                        stoneClicked = false
-                        paperClicked = false
-                        player2Choice = "Scissors"
-                    },
-                    modifier = Modifier.semantics {
-                        contentDescription = "Scissors"
-                    },
-                    enabled = true
-                )
-
-                Text(text = "Scissors")
-
-                Spacer(modifier = Modifier.width(8.dp))
-
-                RadioButton(
-                    selected = paperClicked,
-                    onClick = {
-                        paperClicked = true
-                        stoneClicked = false
-                        scissorsClicked = false
-                        player2Choice = "Paper"
-                    },
-                    modifier = Modifier.semantics { contentDescription = "Paper" },
-                    enabled = true
-                )
-
-                Text(text = "Paper")
-            }
-
-            // if an option is clicked a button "Continue" appears
-            if (player2Choice.isNotBlank()) {
-                Button(onClick = { player2HasChosen = true }) {
-                    Text(text = "Continue")
+        } else if (!player2HasChosen) {
+            Player2Choice(
+                name2 = player2Name,
+                choice = player2Choice,
+                onStoneClicked = {
+                    player2Choice = Choice.STONE
+                },
+                onScissorsClicked = {
+                    player2Choice = Choice.SCISSORS
+                },
+                onPaperClicked = {
+                    player2Choice = Choice.PAPER
+                },
+                onPlayer2HasChosen = {
+                    player2HasChosen = true
                 }
-            }
-            // The two players have chosen. Now it's time to tell who is the winner.
+            )
         } else {
-            var winnerName by rememberSaveable { mutableStateOf("") }
-
-            when (player1Choice) {
-                "Stone" -> winnerName = when (player2Choice) {
-                    "Stone" -> "Both"
-                    "Paper" -> player2Name
-                    else -> player1Name
-                }
-
-                "Scissors" -> winnerName = when (player2Choice) {
-                    "Scissors" -> "Both"
-                    "Stone" -> player2Name
-                    else -> player1Name
-                }
-
-                "Paper" -> winnerName = when (player2Choice) {
-                    "Paper" -> "Both"
-                    "Scissors" -> player2Name
-                    else -> player1Name
-                }
-            }
-
-            Text(text = "The winner is: $winnerName. Congratulations!")
+            Winner(
+                player1Name = player1Name,
+                player2Name = player2Name,
+                player1Choice = player1Choice,
+                player2Choice = player2Choice,
+                winnerName = winnerName
+            )
         }
     }
-}
 }
 
 @Composable
@@ -287,7 +216,7 @@ fun Player1Choice(
     onPaperClicked: () -> Unit,
     onPlayer1HasChosen: () -> Unit
 ) {
-    Text(text = "$name1's turn")
+    Text(text = "${name1.value}'s turn")
 
     Spacer(modifier = Modifier.height(8.dp))
 
@@ -331,10 +260,102 @@ fun Player1Choice(
         )
 
         Text(text = "Paper")
+    }
 
-        Button(onClick = { onPlayer1HasChosen() }) {
-            Text(text = "Continue")
-        }
+    Button(onClick = { onPlayer1HasChosen() }) {
+        Text(text = "Continue")
     }
 }
 
+@Composable
+fun Player2Choice(
+    name2: MutableState<String>,
+    choice: Choice?,
+    onStoneClicked: () -> Unit,
+    onScissorsClicked: () -> Unit,
+    onPaperClicked: () -> Unit,
+    onPlayer2HasChosen: () -> Unit
+) {
+    Text(text = "${name2.value}'s turn")
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Row(
+        modifier = Modifier.selectableGroup(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        RadioButton(
+            selected = choice == Choice.STONE,
+            onClick = {
+                onStoneClicked()
+            },
+            modifier = Modifier.semantics { contentDescription = "Stone" },
+            enabled = true
+        )
+
+        Text(text = "Stone")
+
+        Spacer(modifier = Modifier.width(8.dp))
+
+        RadioButton(
+            selected = choice == Choice.SCISSORS,
+            onClick = {
+                onScissorsClicked()
+            },
+            modifier = Modifier.semantics { contentDescription = "Scissors" },
+            enabled = true
+        )
+
+        Text(text = "Scissors")
+
+        Spacer(modifier = Modifier.width(8.dp))
+
+        RadioButton(
+            selected = choice == Choice.PAPER,
+            onClick = {
+                onPaperClicked()
+            },
+            modifier = Modifier.semantics { contentDescription = "Paper" },
+            enabled = true
+        )
+
+        Text(text = "Paper")
+    }
+
+    Button(onClick = { onPlayer2HasChosen() }) {
+        Text(text = "Continue")
+    }
+}
+
+@Composable
+fun Winner(
+    player1Name: MutableState<String>,
+    player2Name: MutableState<String>,
+    player1Choice: Choice?,
+    player2Choice: Choice?,
+    winnerName: MutableState<String>
+) {
+    when (player1Choice) {
+        Choice.STONE -> winnerName.value = when (player2Choice) {
+            Choice.STONE -> "Both"
+            Choice.PAPER -> player2Name.value
+            else -> player1Name.value
+        }
+
+        Choice.SCISSORS -> winnerName.value = when (player2Choice) {
+            Choice.SCISSORS -> "Both"
+            Choice.STONE -> player2Name.value
+            else -> player1Name.value
+        }
+
+        Choice.PAPER -> winnerName.value = when (player2Choice) {
+            Choice.PAPER -> "Both"
+            Choice.SCISSORS -> player2Name.value
+            else -> player1Name.value
+        }
+
+        else -> {}
+    }
+
+    Text(text = "The winner is: ${winnerName.value}. Congratulations!")
+}
