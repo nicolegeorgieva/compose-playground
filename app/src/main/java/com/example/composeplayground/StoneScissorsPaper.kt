@@ -21,6 +21,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -28,7 +30,7 @@ import androidx.compose.ui.unit.dp
 fun StoneScissorsPaper() {
     var pressedStart by rememberSaveable { mutableStateOf(false) }
     var selectedNumberOfPlayers by rememberSaveable { mutableStateOf(false) }
-    var selectedPlayersNames by rememberSaveable { mutableStateOf(false) }
+    var setPlayersNames by rememberSaveable { mutableStateOf(false) }
     var player1Name by rememberSaveable { mutableStateOf("") }
     var player2Name by rememberSaveable { mutableStateOf("") }
 
@@ -43,13 +45,10 @@ fun StoneScissorsPaper() {
             ChooseNumberOfPlayers(state = selectedNumberOfPlayers, updateState = {
                 selectedNumberOfPlayers = true
             })
-        }
-
-        // start of the game
-        // choose number of players
-
-        if (!selectedPlayersNames) {
-
+        } else if (!setPlayersNames) {
+            SetNamesOfPlayers(state = setPlayersNames, updateState = {
+                setPlayersNames = true
+            })
         }
 
         var player1Choice by rememberSaveable { mutableStateOf("") }
@@ -220,7 +219,6 @@ fun StoneScissorsPaper() {
                 }
 
                 Text(text = "The winner is: $winnerName. Congratulations!")
-                }
             }
         }
     }
@@ -288,8 +286,9 @@ fun ChooseNumberOfPlayers(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SelectNamesOfPlayers(
+fun SetNamesOfPlayers(
     state: Boolean,
     updateState: (Boolean) -> Unit
 ) {
@@ -297,24 +296,32 @@ fun SelectNamesOfPlayers(
 
     Spacer(modifier = Modifier.height(8.dp))
 
+    var name1 by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+        mutableStateOf(TextFieldValue("", TextRange(0, 7)))
+    }
+
     TextField(
-        value = state,
-        onValueChange = { updateState(state) },
+        value = name1,
+        onValueChange = { name1 = it },
         label = { Text("Player 1") }
     )
 
     Spacer(modifier = Modifier.height(8.dp))
 
+    var name2 by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+        mutableStateOf(TextFieldValue("", TextRange(0, 7)))
+    }
+
     TextField(
-        value = player2Name,
-        onValueChange = { player2Name = it },
+        value = name2,
+        onValueChange = { name2 = it },
         label = { Text("Player 2") }
     )
 
     Spacer(modifier = Modifier.height(8.dp))
 
-    if (player1Name.isNotBlank() && player2Name.isNotBlank()) {
-        Button(onClick = { selectedPlayersNames = true }) {
+    if (name1.text.isNotBlank() && name2.text.isNotBlank()) {
+        Button(onClick = { updateState(state) }) {
             Text(text = "Continue")
         }
     }
