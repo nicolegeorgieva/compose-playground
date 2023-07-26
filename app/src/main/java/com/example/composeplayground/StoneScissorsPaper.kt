@@ -28,35 +28,38 @@ enum class Choice {
     STONE, SCISSORS, PAPER
 }
 
+enum class NumberOfPlayers {
+    TWO, THREE
+}
+
 @Composable
 fun StoneScissorsPaper() {
     var pressedStart by rememberSaveable { mutableStateOf(false) }
     var selectedNumberOfPlayers by rememberSaveable { mutableStateOf(false) }
 
     var setPlayersNames by rememberSaveable { mutableStateOf(false) }
-    var player1Name = rememberSaveable { mutableStateOf("") }
-    var player2Name = rememberSaveable { mutableStateOf("") }
+    val player1Name = rememberSaveable { mutableStateOf("") }
+    val player2Name = rememberSaveable { mutableStateOf("") }
 
     var player1Choice by rememberSaveable { mutableStateOf<Choice?>(null) }
     var player1HasChosen by rememberSaveable { mutableStateOf(false) }
     var player2Choice by rememberSaveable { mutableStateOf<Choice?>(null) }
     var player2HasChosen by rememberSaveable { mutableStateOf(false) }
 
-    var winnerName = rememberSaveable { mutableStateOf("") }
+    val winnerName = rememberSaveable { mutableStateOf("") }
 
     Column(modifier = Modifier.padding(12.dp)) {
-        // pre-start of the game
-
         if (!pressedStart) {
             PreStart(startBtnPressed = pressedStart, onStartBtnPressed = {
                 pressedStart = true
             })
         } else if (!selectedNumberOfPlayers) {
             ChooseNumberOfPlayers(
-                numberOfPlayersSelected = selectedNumberOfPlayers,
-                onNumberOfPlayersSelected = {
+                selectedNumberOfPlayers = selectedNumberOfPlayers,
+                onNumberOfPlayersChosen = {
                     selectedNumberOfPlayers = true
-                })
+                }
+            )
         } else if (!setPlayersNames) {
             SetNamesOfPlayers(
                 name1 = player1Name,
@@ -126,22 +129,22 @@ fun PreStart(
 
 @Composable
 fun ChooseNumberOfPlayers(
-    numberOfPlayersSelected: Boolean,
-    onNumberOfPlayersSelected: (Boolean) -> Unit
+    selectedNumberOfPlayers: Boolean,
+    onNumberOfPlayersChosen: () -> Unit
 ) {
     Text(text = "Choose number of players")
 
     Spacer(modifier = Modifier.height(8.dp))
 
-    var numberOfPlayers by rememberSaveable { mutableStateOf(true) }
+    var numberOfPlayers by rememberSaveable { mutableStateOf<NumberOfPlayers?>(null) }
 
     Row(
         modifier = Modifier.selectableGroup(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         RadioButton(
-            selected = numberOfPlayers,
-            onClick = { numberOfPlayers = true },
+            selected = selectedNumberOfPlayers,
+            onClick = { numberOfPlayers = NumberOfPlayers.TWO },
             modifier = Modifier.semantics { contentDescription = "Option 1" },
             enabled = true
         )
@@ -151,8 +154,8 @@ fun ChooseNumberOfPlayers(
         Spacer(modifier = Modifier.width(8.dp))
 
         RadioButton(
-            selected = !numberOfPlayers,
-            onClick = { numberOfPlayers = false },
+            selected = !selectedNumberOfPlayers,
+            onClick = { numberOfPlayers = NumberOfPlayers.THREE },
             modifier = Modifier.semantics { contentDescription = "Option 2" },
             enabled = true
         )
@@ -162,13 +165,8 @@ fun ChooseNumberOfPlayers(
 
     Spacer(modifier = Modifier.height(8.dp))
 
-    // selected first option - "2"
-    if (numberOfPlayers) {
-        Button(onClick = { onNumberOfPlayersSelected(numberOfPlayersSelected) }) {
-            Text(text = "Continue")
-        }
-    } else {
-        Text(text = "Coming soon")
+    Button(onClick = { onNumberOfPlayersChosen }) {
+        Text(text = "Continue")
     }
 }
 
