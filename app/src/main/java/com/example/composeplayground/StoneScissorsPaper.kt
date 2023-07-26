@@ -47,6 +47,8 @@ fun StoneScissorsPaper() {
     var player1HasChosen by rememberSaveable { mutableStateOf(false) }
     var player2Choice by rememberSaveable { mutableStateOf<Choice?>(null) }
     var player2HasChosen by rememberSaveable { mutableStateOf(false) }
+    var player3Choice by rememberSaveable { mutableStateOf<Choice?>(null) }
+    var player3HasChosen by rememberSaveable { mutableStateOf(false) }
 
     val winnerName = rememberSaveable { mutableStateOf("") }
 
@@ -109,6 +111,23 @@ fun StoneScissorsPaper() {
                 },
                 onPlayer2HasChosen = {
                     player2HasChosen = true
+                }
+            )
+        } else if (!player3HasChosen && selectedNumberOfPlayers == NumberOfPlayers.THREE) {
+            Player3Choice(
+                name3 = player3Name,
+                choice = player3Choice,
+                onStoneClicked = {
+                    player3Choice = Choice.STONE
+                },
+                onScissorsClicked = {
+                    player3Choice = Choice.SCISSORS
+                },
+                onPaperClicked = {
+                    player3Choice = Choice.PAPER
+                },
+                onPlayer3HasChosen = {
+                    player3HasChosen = true
                 }
             )
         } else {
@@ -356,6 +375,66 @@ fun Player2Choice(
     }
 
     Button(onClick = { onPlayer2HasChosen() }) {
+        Text(text = "Continue")
+    }
+}
+
+@Composable
+fun Player3Choice(
+    name3: MutableState<String>,
+    choice: Choice?,
+    onStoneClicked: () -> Unit,
+    onScissorsClicked: () -> Unit,
+    onPaperClicked: () -> Unit,
+    onPlayer3HasChosen: () -> Unit
+) {
+    Text(text = "${name3.value}'s turn")
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Row(
+        modifier = Modifier.selectableGroup(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        RadioButton(
+            selected = choice == Choice.STONE,
+            onClick = {
+                onStoneClicked()
+            },
+            modifier = Modifier.semantics { contentDescription = "Stone" },
+            enabled = true
+        )
+
+        Text(text = "Stone")
+
+        Spacer(modifier = Modifier.width(8.dp))
+
+        RadioButton(
+            selected = choice == Choice.SCISSORS,
+            onClick = {
+                onScissorsClicked()
+            },
+            modifier = Modifier.semantics { contentDescription = "Scissors" },
+            enabled = true
+        )
+
+        Text(text = "Scissors")
+
+        Spacer(modifier = Modifier.width(8.dp))
+
+        RadioButton(
+            selected = choice == Choice.PAPER,
+            onClick = {
+                onPaperClicked()
+            },
+            modifier = Modifier.semantics { contentDescription = "Paper" },
+            enabled = true
+        )
+
+        Text(text = "Paper")
+    }
+
+    Button(onClick = { onPlayer3HasChosen() }) {
         Text(text = "Continue")
     }
 }
