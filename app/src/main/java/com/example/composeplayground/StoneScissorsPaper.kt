@@ -132,10 +132,13 @@ fun StoneScissorsPaper() {
             )
         } else {
             Winner(
+                numberOfPlayers = selectedNumberOfPlayers,
                 player1Name = player1Name,
                 player2Name = player2Name,
+                player3Name = player3Name,
                 player1Choice = player1Choice,
                 player2Choice = player2Choice,
+                player3Choice = player3Choice,
                 winnerName = winnerName
             )
         }
@@ -441,32 +444,110 @@ fun Player3Choice(
 
 @Composable
 fun Winner(
+    numberOfPlayers: NumberOfPlayers?,
     player1Name: MutableState<String>,
     player2Name: MutableState<String>,
+    player3Name: MutableState<String>,
     player1Choice: Choice?,
     player2Choice: Choice?,
+    player3Choice: Choice?,
     winnerName: MutableState<String>
 ) {
-    when (player1Choice) {
-        Choice.STONE -> winnerName.value = when (player2Choice) {
-            Choice.STONE -> "Both"
-            Choice.PAPER -> player2Name.value
-            else -> player1Name.value
-        }
+    if (numberOfPlayers == NumberOfPlayers.TWO) {
+        when (player1Choice) {
+            Choice.STONE -> winnerName.value = when (player2Choice) {
+                Choice.STONE -> "Both."
+                Choice.PAPER -> "${player2Name.value}."
+                else -> "${player1Name.value}."
+            }
 
-        Choice.SCISSORS -> winnerName.value = when (player2Choice) {
-            Choice.SCISSORS -> "Both"
-            Choice.STONE -> player2Name.value
-            else -> player1Name.value
-        }
+            Choice.SCISSORS -> winnerName.value = when (player2Choice) {
+                Choice.SCISSORS -> "Both."
+                Choice.STONE -> "${player2Name.value}."
+                else -> "${player1Name.value}."
+            }
 
-        Choice.PAPER -> winnerName.value = when (player2Choice) {
-            Choice.PAPER -> "Both"
-            Choice.SCISSORS -> player2Name.value
-            else -> player1Name.value
-        }
+            Choice.PAPER -> winnerName.value = when (player2Choice) {
+                Choice.PAPER -> "Both."
+                Choice.SCISSORS -> "${player2Name.value}."
+                else -> "${player1Name.value}."
+            }
 
-        else -> {}
+            else -> {}
+        }
+    } else {
+        when (player1Choice) {
+            Choice.STONE -> winnerName.value = when (player2Choice) {
+                Choice.STONE -> when (player3Choice) {
+                    Choice.STONE -> "Nobody."
+                    Choice.SCISSORS -> "Nobody. $player1Name and $player2Name should play again."
+                    Choice.PAPER -> "${player3Name.value}."
+                    else -> {}
+                }.toString()
+
+                Choice.PAPER -> when (player3Choice) {
+                    Choice.STONE -> "${player2Name.value}."
+                    Choice.SCISSORS -> "Nobody."
+                    Choice.PAPER -> "Nobody. $player2Name and $player3Name should play again."
+                    else -> {}
+                }.toString()
+                // 2nd player chose Scissors
+                else -> when (player3Choice) {
+                    Choice.STONE -> "Nobody. $player1Name and $player3Name should play again."
+                    Choice.SCISSORS -> "$player1Name."
+                    Choice.PAPER -> "Nobody."
+                    else -> {}
+                }.toString()
+            }
+
+            Choice.SCISSORS -> winnerName.value = when (player2Choice) {
+                Choice.STONE -> when (player3Choice) {
+                    Choice.STONE -> "Nobody. $player2Name and $player3Name should play again."
+                    Choice.SCISSORS -> "$player2Name."
+                    Choice.PAPER -> "Nobody."
+                    else -> {}
+                }.toString()
+
+                Choice.PAPER -> when (player3Choice) {
+                    Choice.STONE -> "Nobody."
+                    Choice.SCISSORS -> "Nobody. $player1Name and $player3Name should play again."
+                    Choice.PAPER -> "${player1Name}."
+                    else -> {}
+                }.toString()
+                // 2nd player chose Scissors
+                else -> when (player3Choice) {
+                    Choice.STONE -> "${player3Name}."
+                    Choice.SCISSORS -> "Nobody."
+                    Choice.PAPER -> "Nobody. $player1Name and $player2Name should play again."
+                    else -> {}
+                }.toString()
+            }
+
+            Choice.PAPER -> winnerName.value = when (player2Choice) {
+                Choice.STONE -> when (player3Choice) {
+                    Choice.STONE -> "${player1Name}."
+                    Choice.SCISSORS -> "Nobody."
+                    Choice.PAPER -> "Nobody. $player1Name and $player3Name should play again."
+                    else -> {}
+                }.toString()
+
+                Choice.PAPER -> when (player3Choice) {
+                    Choice.STONE -> "Nobody. $player1Name and $player2Name should play again."
+                    Choice.SCISSORS -> "${player3Name}."
+                    Choice.PAPER -> "Nobody."
+                    else -> {}
+                }.toString()
+                // 2nd player chose Scissors
+                else -> when (player3Choice) {
+                    Choice.STONE -> "Nobody."
+                    Choice.SCISSORS -> "Nobody. $player2Name and $player3Name should play again."
+                    Choice.PAPER -> "Nobody. $player1Name and $player3Name should play again."
+                    else -> {}
+                }.toString()
+            }
+
+            else -> {}
+        }
     }
 
     Text(text = "The winner is: ${winnerName.value}. Congratulations!")
