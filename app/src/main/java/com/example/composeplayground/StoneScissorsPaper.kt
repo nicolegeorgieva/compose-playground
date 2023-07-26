@@ -41,6 +41,7 @@ fun StoneScissorsPaper() {
     var setPlayersNames by rememberSaveable { mutableStateOf(false) }
     val player1Name = rememberSaveable { mutableStateOf("") }
     val player2Name = rememberSaveable { mutableStateOf("") }
+    val player3Name = rememberSaveable { mutableStateOf("") }
 
     var player1Choice by rememberSaveable { mutableStateOf<Choice?>(null) }
     var player1HasChosen by rememberSaveable { mutableStateOf(false) }
@@ -69,8 +70,10 @@ fun StoneScissorsPaper() {
             )
         } else if (!setPlayersNames) {
             SetNamesOfPlayers(
-                name1 = player1Name,
-                name2 = player2Name,
+                numberOfPlayers = selectedNumberOfPlayers,
+                player1Name = player1Name,
+                player2Name = player2Name,
+                player3Name = player3Name,
                 namesOfPlayersSet = setPlayersNames,
                 onNamesOfPlayersSet = {
                     setPlayersNames = true
@@ -184,8 +187,10 @@ fun ChooseNumberOfPlayers(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SetNamesOfPlayers(
-    name1: MutableState<String>,
-    name2: MutableState<String>,
+    numberOfPlayers: NumberOfPlayers?,
+    player1Name: MutableState<String>,
+    player2Name: MutableState<String>,
+    player3Name: MutableState<String>,
     namesOfPlayersSet: Boolean,
     onNamesOfPlayersSet: (Boolean) -> Unit
 ) {
@@ -194,24 +199,43 @@ fun SetNamesOfPlayers(
     Spacer(modifier = Modifier.height(8.dp))
 
     TextField(
-        value = name1.value,
-        onValueChange = { name1.value = it },
+        value = player1Name.value,
+        onValueChange = { player1Name.value = it },
         label = { Text("Player 1") }
     )
 
     Spacer(modifier = Modifier.height(8.dp))
 
     TextField(
-        value = name2.value,
-        onValueChange = { name2.value = it },
+        value = player2Name.value,
+        onValueChange = { player2Name.value = it },
         label = { Text("Player 2") }
     )
 
+    if (numberOfPlayers == NumberOfPlayers.THREE) {
+        Spacer(modifier = Modifier.height(8.dp))
+
+        TextField(
+            value = player3Name.value,
+            onValueChange = { player3Name.value = it },
+            label = { Text("Player 3") }
+        )
+    }
+
     Spacer(modifier = Modifier.height(8.dp))
 
-    if (name1.value.isNotBlank() && name2.value.isNotBlank()) {
-        Button(onClick = { onNamesOfPlayersSet(namesOfPlayersSet) }) {
-            Text(text = "Continue")
+
+    if (player1Name.value.isNotBlank() && player2Name.value.isNotBlank()) {
+        if (numberOfPlayers == NumberOfPlayers.TWO) {
+            Button(onClick = { onNamesOfPlayersSet(namesOfPlayersSet) }) {
+                Text(text = "Continue")
+            }
+        } else {
+            if (player3Name.value.isNotBlank()) {
+                Button(onClick = { onNamesOfPlayersSet(namesOfPlayersSet) }) {
+                    Text(text = "Continue")
+                }
+            }
         }
     }
 }
