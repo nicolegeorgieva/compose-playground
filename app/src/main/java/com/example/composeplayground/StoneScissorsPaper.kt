@@ -176,7 +176,7 @@ fun ChooseNumberOfPlayers(
 
     Spacer(modifier = Modifier.height(8.dp))
 
-    Button(onClick = { onNumberOfPlayersChosen }) {
+    Button(onClick = { onNumberOfPlayersChosen() }) {
         Text(text = "Continue")
     }
 }
