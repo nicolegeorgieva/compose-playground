@@ -37,12 +37,6 @@ fun GuessTheNumber() {
 
         if (startIsPressed) {
             GenerateInitialNumber(guess = guess)
-
-            if (guess.value == Guess.CORRECT) {
-                Text(text = "Congrats, you guessed correctly!")
-            } else {
-                Text(text = "Sorry, you didn't guess correctly!")
-            }
         } else {
             StartOfTheGame(onStartPressed = { startIsPressed = true })
         }
@@ -74,55 +68,85 @@ fun GenerateInitialNumber(guess: MutableState<Guess?>) {
         mutableStateOf(getRandomIntExcluding(generateInitialNumber))
     }
 
-    var numberIsUp by rememberSaveable {
-        mutableStateOf(false)
-    }
+    var numberIsUp by rememberSaveable { mutableStateOf(false) }
+
+    var hasAnswered by rememberSaveable { mutableStateOf(false) }
 
     if (generateSecondNumber > generateInitialNumber) {
         numberIsUp = true
     }
 
-    Text(text = "The first number is: $generateInitialNumber")
+    if (!hasAnswered) {
+        Text(text = "The first number is: $generateInitialNumber")
 
-    Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
-    Text(text = "Will the second number be up or down?")
+        Text(text = "Will the second number be up or down?")
 
-    Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-    Row {
-        Spacer(modifier = Modifier.weight(1f))
+        Row {
+            Spacer(modifier = Modifier.weight(1f))
 
-        Button(
-            onClick = {
-                if (numberIsUp) {
-                    guess.value = Guess.CORRECT
-                } else {
-                    guess.value = Guess.WRONG
+            Button(
+                onClick = {
+                    if (numberIsUp) {
+                        guess.value = Guess.CORRECT
+                        hasAnswered = true
+                    } else {
+                        guess.value = Guess.WRONG
+                        hasAnswered = true
+                    }
                 }
+            ) {
+                Text("Up")
             }
-        ) {
-            Text("Up")
-        }
 
-        Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.weight(1f))
 
-        Button(
-            onClick = {
-                if (!numberIsUp) {
-                    guess.value = Guess.CORRECT
-                } else {
-                    guess.value = Guess.WRONG
+            Button(
+                onClick = {
+                    if (!numberIsUp) {
+                        guess.value = Guess.CORRECT
+                        hasAnswered = true
+                    } else {
+                        guess.value = Guess.WRONG
+                        hasAnswered = true
+                    }
                 }
+            ) {
+                Text("Down")
             }
-        ) {
-            Text("Down")
-        }
 
-        Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.weight(1f))
+        }
+    } else {
+        if (guess.value == Guess.CORRECT) {
+            CorrectUI(number = generateSecondNumber)
+        } else {
+            WrongUI(number = generateSecondNumber)
+        }
     }
 }
 
 fun getRandomIntExcluding(excluded: Int): Int {
     return (0..100).filter { it != excluded }.random()
+}
+
+@Composable
+fun CorrectUI(number: Int) {
+    Text(text = "Congrats, you guessed correctly!")
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Text(text = "The number is $number.")
+}
+
+@Composable
+fun WrongUI(number: Int) {
+    Text(text = "Sorry, you didn't guess correctly!")
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Text(text = "The right number is $number.")
 }
