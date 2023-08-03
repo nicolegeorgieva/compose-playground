@@ -2,9 +2,11 @@ package com.example.composeplayground
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -51,10 +53,39 @@ fun StartOfTheGame(onStartPressed: () -> Unit) {
 
 @Composable
 fun GenerateInitialNumber() {
-    val randomNumber = Random.nextInt(0, 100)
-
-    val generateInitialNumber by rememberSaveable { mutableStateOf(randomNumber) }
+    val generateInitialNumber by rememberSaveable {
+        mutableStateOf(Random.nextInt(0, 100))
+    }
 
     Text(text = "The first number is: $generateInitialNumber")
 
+    Spacer(modifier = Modifier.height(12.dp))
+
+    Text(text = "Will the second number be up or down?")
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Row {
+        Spacer(modifier = Modifier.weight(1f))
+
+        Button(
+            onClick = {
+                /* Do something! */
+            }
+        ) {
+            Text("Up")
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Button(
+            onClick = {
+                /* Do something! */
+            }
+        ) {
+            Text("Down")
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
+    }
 }
