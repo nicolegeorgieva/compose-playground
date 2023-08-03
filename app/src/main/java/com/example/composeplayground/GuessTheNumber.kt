@@ -34,9 +34,12 @@ fun GuessTheNumber() {
     ) {
         var startIsPressed by rememberSaveable { mutableStateOf(false) }
         val guess = rememberSaveable { mutableStateOf<Guess?>(null) }
+        val tryAgainPressed = rememberSaveable { mutableStateOf(false) }
 
         if (startIsPressed) {
-            GenerateInitialNumber(guess = guess)
+            if (!tryAgainPressed.value) {
+                GenerateInitialNumber(guess = guess, tryAgainPressed = tryAgainPressed)
+            } else GenerateInitialNumber(guess = guess, tryAgainPressed = tryAgainPressed)
         } else {
             StartOfTheGame(onStartPressed = { startIsPressed = true })
         }
@@ -59,7 +62,10 @@ fun StartOfTheGame(onStartPressed: () -> Unit) {
 }
 
 @Composable
-fun GenerateInitialNumber(guess: MutableState<Guess?>) {
+fun GenerateInitialNumber(
+    guess: MutableState<Guess?>,
+    tryAgainPressed: MutableState<Boolean>
+) {
     val generateInitialNumber by rememberSaveable {
         mutableStateOf(Random.nextInt(0, 100))
     }
@@ -122,9 +128,15 @@ fun GenerateInitialNumber(guess: MutableState<Guess?>) {
         }
     } else {
         if (guess.value == Guess.CORRECT) {
-            CorrectUI(number = generateSecondNumber)
+            CorrectUI(
+                number = generateSecondNumber,
+                onTryAgain = { tryAgainPressed.value = true }
+            )
         } else {
-            WrongUI(number = generateSecondNumber)
+            WrongUI(
+                number = generateSecondNumber,
+                onTryAgain = { tryAgainPressed.value = true }
+            )
         }
     }
 }
@@ -134,7 +146,10 @@ fun getRandomIntExcluding(excluded: Int): Int {
 }
 
 @Composable
-fun CorrectUI(number: Int) {
+fun CorrectUI(
+    number: Int,
+    onTryAgain: () -> Unit
+) {
     Text(text = "Congrats, you guessed correctly!")
 
     Spacer(modifier = Modifier.height(8.dp))
@@ -145,7 +160,7 @@ fun CorrectUI(number: Int) {
 
     ElevatedButton(
         onClick = {
-
+            onTryAgain()
         }
     ) {
         Text(text = "Try again")
@@ -153,7 +168,10 @@ fun CorrectUI(number: Int) {
 }
 
 @Composable
-fun WrongUI(number: Int) {
+fun WrongUI(
+    number: Int,
+    onTryAgain: () -> Unit
+) {
     Text(text = "Sorry, you guessed wrong!")
 
     Spacer(modifier = Modifier.height(8.dp))
@@ -164,7 +182,7 @@ fun WrongUI(number: Int) {
 
     ElevatedButton(
         onClick = {
-            /* Do something! */
+            onTryAgain()
         }
     ) {
         Text(text = "Try again")
