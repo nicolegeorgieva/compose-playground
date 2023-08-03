@@ -145,7 +145,7 @@ fun CorrectUI(number: Int) {
 
     ElevatedButton(
         onClick = {
-            /* Do something! */
+
         }
     ) {
         Text(text = "Try again")
