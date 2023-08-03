@@ -140,13 +140,33 @@ fun CorrectUI(number: Int) {
     Spacer(modifier = Modifier.height(8.dp))
 
     Text(text = "The number is $number.")
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    ElevatedButton(
+        onClick = {
+            /* Do something! */
+        }
+    ) {
+        Text(text = "Try again")
+    }
 }
 
 @Composable
 fun WrongUI(number: Int) {
-    Text(text = "Sorry, you didn't guess correctly!")
+    Text(text = "Sorry, you guessed wrong!")
 
     Spacer(modifier = Modifier.height(8.dp))
 
     Text(text = "The right number is $number.")
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    ElevatedButton(
+        onClick = {
+            /* Do something! */
+        }
+    ) {
+        Text(text = "Try again")
+    }
 }
