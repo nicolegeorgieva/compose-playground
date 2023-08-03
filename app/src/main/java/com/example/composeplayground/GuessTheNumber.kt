@@ -19,6 +19,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlin.random.Random
 
+enum class Guess {
+    CORRECT,
+    WRONG
+}
+
 @Composable
 fun GuessTheNumber() {
     Column(
@@ -57,6 +62,18 @@ fun GenerateInitialNumber() {
         mutableStateOf(Random.nextInt(0, 100))
     }
 
+    val generateSecondNumber by rememberSaveable {
+        mutableStateOf(getRandomIntExcluding(generateInitialNumber))
+    }
+
+    var numberIsUp by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    if (generateSecondNumber > generateInitialNumber) {
+        numberIsUp = true
+    }
+
     Text(text = "The first number is: $generateInitialNumber")
 
     Spacer(modifier = Modifier.height(12.dp))
@@ -70,7 +87,11 @@ fun GenerateInitialNumber() {
 
         Button(
             onClick = {
-                /* Do something! */
+                if (numberIsUp) {
+                    Guess.CORRECT
+                } else {
+                    Guess.WRONG
+                }
             }
         ) {
             Text("Up")
@@ -80,7 +101,11 @@ fun GenerateInitialNumber() {
 
         Button(
             onClick = {
-                /* Do something! */
+                if (!numberIsUp) {
+                    Guess.CORRECT
+                } else {
+                    Guess.WRONG
+                }
             }
         ) {
             Text("Down")
@@ -88,4 +113,8 @@ fun GenerateInitialNumber() {
 
         Spacer(modifier = Modifier.weight(1f))
     }
+}
+
+fun getRandomIntExcluding(excluded: Int): Int {
+    return (0..100).filter { it != excluded }.random()
 }
