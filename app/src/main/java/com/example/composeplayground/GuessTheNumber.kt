@@ -25,6 +25,17 @@ enum class Guess {
     WRONG
 }
 
+sealed interface NumbersGame {
+    object GameNotStarted : NumbersGame
+    data class Playing(val number: Int) : NumbersGame
+    data class Result(val result: ResultState) : NumbersGame
+}
+
+sealed interface ResultState {
+    object Success : ResultState
+    object Failure : ResultState
+}
+
 @Composable
 fun GuessTheNumber() {
     Column(
