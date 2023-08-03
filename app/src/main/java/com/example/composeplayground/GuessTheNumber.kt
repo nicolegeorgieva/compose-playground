@@ -39,7 +39,12 @@ fun GuessTheNumber() {
         if (startIsPressed) {
             if (!tryAgainPressed.value) {
                 GenerateInitialNumber(guess = guess, tryAgainPressed = tryAgainPressed)
-            } else GenerateInitialNumber(guess = guess, tryAgainPressed = tryAgainPressed)
+            }
+
+            while (tryAgainPressed.value) {
+                GenerateInitialNumber(guess = guess, tryAgainPressed = tryAgainPressed)
+                tryAgainPressed.value = false
+            }
         } else {
             StartOfTheGame(onStartPressed = { startIsPressed = true })
         }
