@@ -10,6 +10,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -32,9 +33,16 @@ fun GuessTheNumber() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         var startIsPressed by rememberSaveable { mutableStateOf(false) }
+        val guess = rememberSaveable { mutableStateOf<Guess?>(null) }
 
         if (startIsPressed) {
-            GenerateInitialNumber()
+            GenerateInitialNumber(guess = guess)
+
+            if (guess.value == Guess.CORRECT) {
+                Text(text = "Congrats, you guessed correctly!")
+            } else {
+                Text(text = "Sorry, you didn't guess correctly!")
+            }
         } else {
             StartOfTheGame(onStartPressed = { startIsPressed = true })
         }
@@ -57,7 +65,7 @@ fun StartOfTheGame(onStartPressed: () -> Unit) {
 }
 
 @Composable
-fun GenerateInitialNumber() {
+fun GenerateInitialNumber(guess: MutableState<Guess?>) {
     val generateInitialNumber by rememberSaveable {
         mutableStateOf(Random.nextInt(0, 100))
     }
@@ -88,9 +96,9 @@ fun GenerateInitialNumber() {
         Button(
             onClick = {
                 if (numberIsUp) {
-                    Guess.CORRECT
+                    guess.value = Guess.CORRECT
                 } else {
-                    Guess.WRONG
+                    guess.value = Guess.WRONG
                 }
             }
         ) {
@@ -102,9 +110,9 @@ fun GenerateInitialNumber() {
         Button(
             onClick = {
                 if (!numberIsUp) {
-                    Guess.CORRECT
+                    guess.value = Guess.CORRECT
                 } else {
-                    Guess.WRONG
+                    guess.value = Guess.WRONG
                 }
             }
         ) {
