@@ -168,18 +168,25 @@ fun Playing(
             Spacer(modifier = Modifier.weight(1f))
         }
     } else {
-        if (guess.value == Guess.CORRECT) {
-            CorrectUI(
-                number = generateSecondNumber,
-                onTryAgain = { tryAgainPressed.value = true },
-                onQuit = { quitPressed.value = true }
+        if (quitPressed.value) {
+            Text(
+                text = "You finished with ${timesGuessedCorrectly.value} correct guesses." +
+                        "You win a total of ${timesGuessedCorrectly.value * 100}$."
             )
         } else {
-            WrongUI(
-                number = generateSecondNumber,
-                onTryAgain = { tryAgainPressed.value = true },
-                onQuit = { quitPressed.value = true }
-            )
+            if (guess.value == Guess.CORRECT) {
+                CorrectUI(
+                    number = generateSecondNumber,
+                    onTryAgain = { tryAgainPressed.value = true },
+                    onQuit = { quitPressed.value = true }
+                )
+            } else {
+                WrongUI(
+                    number = generateSecondNumber,
+                    onTryAgain = { tryAgainPressed.value = true },
+                    onQuit = { quitPressed.value = true }
+                )
+            }
         }
     }
 }
