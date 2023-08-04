@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +20,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlin.random.Random
@@ -30,10 +32,11 @@ enum class Guess {
 
 @Composable
 fun GuessTheNumber() {
-    var startIsPressed by rememberSaveable { mutableStateOf(false) }
+    var startPressed by rememberSaveable { mutableStateOf(false) }
     val timesGuessedCorrectly = rememberSaveable { mutableStateOf(0) }
+    val quitPressed = rememberSaveable { mutableStateOf(false) }
 
-    if (startIsPressed) {
+    if (startPressed) {
         Row {
             Text(
                 text = "${timesGuessedCorrectly.value} times guessed correctly",
@@ -55,12 +58,13 @@ fun GuessTheNumber() {
         val guess = rememberSaveable { mutableStateOf<Guess?>(null) }
         val tryAgainPressed = rememberSaveable { mutableStateOf(false) }
 
-        if (startIsPressed) {
+        if (startPressed) {
             if (!tryAgainPressed.value) {
                 Playing(
                     guess = guess,
                     tryAgainPressed = tryAgainPressed,
-                    timesGuessedCorrectly = timesGuessedCorrectly
+                    timesGuessedCorrectly = timesGuessedCorrectly,
+                    quitPressed = quitPressed
                 )
             }
 
@@ -68,12 +72,13 @@ fun GuessTheNumber() {
                 Playing(
                     guess = guess,
                     tryAgainPressed = tryAgainPressed,
-                    timesGuessedCorrectly = timesGuessedCorrectly
+                    timesGuessedCorrectly = timesGuessedCorrectly,
+                    quitPressed = quitPressed
                 )
                 tryAgainPressed.value = false
             }
         } else {
-            StartOfTheGame(onStartPressed = { startIsPressed = true })
+            StartOfTheGame(onStartPressed = { startPressed = true })
         }
     }
 }
@@ -97,7 +102,8 @@ fun StartOfTheGame(onStartPressed: () -> Unit) {
 fun Playing(
     guess: MutableState<Guess?>,
     tryAgainPressed: MutableState<Boolean>,
-    timesGuessedCorrectly: MutableState<Int>
+    timesGuessedCorrectly: MutableState<Int>,
+    quitPressed: MutableState<Boolean>
 ) {
     val generateInitialNumber by rememberSaveable {
         mutableStateOf(Random.nextInt(0, 100))
@@ -165,12 +171,14 @@ fun Playing(
         if (guess.value == Guess.CORRECT) {
             CorrectUI(
                 number = generateSecondNumber,
-                onTryAgain = { tryAgainPressed.value = true }
+                onTryAgain = { tryAgainPressed.value = true },
+                onQuit = { quitPressed.value = true }
             )
         } else {
             WrongUI(
                 number = generateSecondNumber,
-                onTryAgain = { tryAgainPressed.value = true }
+                onTryAgain = { tryAgainPressed.value = true },
+                onQuit = { quitPressed.value = true }
             )
         }
     }
@@ -183,7 +191,8 @@ fun getRandomIntExcluding(excluded: Int): Int {
 @Composable
 fun CorrectUI(
     number: Int,
-    onTryAgain: () -> Unit
+    onTryAgain: () -> Unit,
+    onQuit: () -> Unit
 ) {
     Text(text = "Congrats, you guessed correctly!")
 
@@ -198,14 +207,31 @@ fun CorrectUI(
             onTryAgain()
         }
     ) {
-        Text(text = "Try again")
+        Text(text = "Continue")
+    }
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Button(
+        onClick = {
+            onQuit()
+        },
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.Red,
+            contentColor = Color.White,
+            disabledContainerColor = Color.Gray,
+            disabledContentColor = Color.White
+        )
+    ) {
+        Text(text = "Quit")
     }
 }
 
 @Composable
 fun WrongUI(
     number: Int,
-    onTryAgain: () -> Unit
+    onTryAgain: () -> Unit,
+    onQuit: () -> Unit
 ) {
     Text(text = "Sorry, you guessed wrong!")
 
@@ -221,5 +247,21 @@ fun WrongUI(
         }
     ) {
         Text(text = "Try again")
+    }
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Button(
+        onClick = {
+            onQuit()
+        },
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.Red,
+            contentColor = Color.White,
+            disabledContainerColor = Color.Gray,
+            disabledContentColor = Color.White
+        )
+    ) {
+        Text(text = "Quit")
     }
 }
