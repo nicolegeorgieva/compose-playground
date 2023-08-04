@@ -36,7 +36,7 @@ fun GuessTheNumber() {
     val timesGuessedCorrectly = rememberSaveable { mutableStateOf(0) }
     val quitPressed = rememberSaveable { mutableStateOf(false) }
 
-    if (startPressed) {
+    if (startPressed && !quitPressed.value) {
         Row {
             Text(
                 text = "${timesGuessedCorrectly.value} times guessed correctly",
