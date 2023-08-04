@@ -30,16 +30,19 @@ enum class Guess {
 
 @Composable
 fun GuessTheNumber() {
+    var startIsPressed by rememberSaveable { mutableStateOf(false) }
     val timesGuessedCorrectly = rememberSaveable { mutableStateOf(0) }
 
-    Row {
-        Text(
-            text = "${timesGuessedCorrectly.value} times guessed correctly",
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            textAlign = TextAlign.End
-        )
+    if (startIsPressed) {
+        Row {
+            Text(
+                text = "${timesGuessedCorrectly.value} times guessed correctly",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp),
+                textAlign = TextAlign.End
+            )
+        }
     }
 
     Column(
@@ -49,7 +52,6 @@ fun GuessTheNumber() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        var startIsPressed by rememberSaveable { mutableStateOf(false) }
         val guess = rememberSaveable { mutableStateOf<Guess?>(null) }
         val tryAgainPressed = rememberSaveable { mutableStateOf(false) }
 
