@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -17,6 +18,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlin.random.Random
 
@@ -25,19 +27,18 @@ enum class Guess {
     WRONG
 }
 
-sealed interface NumbersGame {
-    object GameNotStarted : NumbersGame
-    data class Playing(val number: Int) : NumbersGame
-    data class Result(val result: ResultState) : NumbersGame
-}
-
-sealed interface ResultState {
-    object Success : ResultState
-    object Failure : ResultState
-}
-
 @Composable
 fun GuessTheNumber() {
+    val timesGuessedCorrectly = rememberSaveable { mutableStateOf(0) }
+
+    Row {
+        Text(
+            text = "${timesGuessedCorrectly.value} times guessed correctly",
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.End
+        )
+    }
+
     Column(
         modifier = Modifier.padding(12.dp),
         verticalArrangement = Arrangement.Center,
@@ -49,11 +50,19 @@ fun GuessTheNumber() {
 
         if (startIsPressed) {
             if (!tryAgainPressed.value) {
-                GenerateInitialNumber(guess = guess, tryAgainPressed = tryAgainPressed)
+                Playing(
+                    guess = guess,
+                    tryAgainPressed = tryAgainPressed,
+                    timesGuessedCorrectly = timesGuessedCorrectly
+                )
             }
 
             while (tryAgainPressed.value) {
-                GenerateInitialNumber(guess = guess, tryAgainPressed = tryAgainPressed)
+                Playing(
+                    guess = guess,
+                    tryAgainPressed = tryAgainPressed,
+                    timesGuessedCorrectly = timesGuessedCorrectly
+                )
                 tryAgainPressed.value = false
             }
         } else {
@@ -78,9 +87,10 @@ fun StartOfTheGame(onStartPressed: () -> Unit) {
 }
 
 @Composable
-fun GenerateInitialNumber(
+fun Playing(
     guess: MutableState<Guess?>,
-    tryAgainPressed: MutableState<Boolean>
+    tryAgainPressed: MutableState<Boolean>,
+    timesGuessedCorrectly: MutableState<Int>
 ) {
     val generateInitialNumber by rememberSaveable {
         mutableStateOf(Random.nextInt(0, 100))
@@ -115,6 +125,7 @@ fun GenerateInitialNumber(
                     if (numberIsUp) {
                         guess.value = Guess.CORRECT
                         hasAnswered = true
+                        timesGuessedCorrectly.value++
                     } else {
                         guess.value = Guess.WRONG
                         hasAnswered = true
@@ -131,6 +142,7 @@ fun GenerateInitialNumber(
                     if (!numberIsUp) {
                         guess.value = Guess.CORRECT
                         hasAnswered = true
+                        timesGuessedCorrectly.value++
                     } else {
                         guess.value = Guess.WRONG
                         hasAnswered = true
