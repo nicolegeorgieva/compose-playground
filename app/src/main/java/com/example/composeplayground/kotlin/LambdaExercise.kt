@@ -4,7 +4,9 @@ fun main() {
     println(findIliyan())
 }
 
-fun findPerson(condition: (Person) -> Boolean): Person? {
+fun findPerson(
+    condition: (Person) -> Boolean
+): Person? {
     val people = listOf(
         Person("Alice"),
         Person("dsa"),
@@ -22,4 +24,4 @@ fun findPerson(condition: (Person) -> Boolean): Person? {
 }
 
 fun findAlice() = findPerson { it.name == "Alice" }
-fun findIliyan() = findPerson { it.name == "Iliyan" }
+fun findIliyan() = findPerson { it.age != null && it.age > 18 }
