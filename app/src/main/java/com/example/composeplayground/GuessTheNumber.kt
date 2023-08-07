@@ -114,8 +114,9 @@ fun Playing(
     }
 
     var numberIsUp by rememberSaveable { mutableStateOf(false) }
-
     var hasAnswered by rememberSaveable { mutableStateOf(false) }
+    var reduceAmount by rememberSaveable { mutableStateOf(0) }
+
 
     if (generateSecondNumber > generateInitialNumber) {
         numberIsUp = true
@@ -142,6 +143,7 @@ fun Playing(
                     } else {
                         guess.value = Guess.WRONG
                         hasAnswered = true
+                        reduceAmount += 50
                     }
                 }
             ) {
@@ -159,6 +161,7 @@ fun Playing(
                     } else {
                         guess.value = Guess.WRONG
                         hasAnswered = true
+                        reduceAmount += 50
                     }
                 }
             ) {
@@ -168,10 +171,15 @@ fun Playing(
             Spacer(modifier = Modifier.weight(1f))
         }
     } else {
+        var sumToEarnOrLose = (timesGuessedCorrectly.value * 100) - reduceAmount
+
         if (quitPressed.value) {
             Text(
-                text = "You finished with ${timesGuessedCorrectly.value} correct guesses." +
-                        "You win a total of ${timesGuessedCorrectly.value * 100}$."
+                text = if (sumToEarnOrLose > 0) {
+                    "You finished with ${timesGuessedCorrectly.value} correct guesses." +
+                            "You win a total of $sumToEarnOrLose$."
+                } else "Sorry, you finish with $sumToEarnOrLose$ and " +
+                        "${timesGuessedCorrectly.value} correct guesses."
             )
         } else {
             if (guess.value == Guess.CORRECT) {
