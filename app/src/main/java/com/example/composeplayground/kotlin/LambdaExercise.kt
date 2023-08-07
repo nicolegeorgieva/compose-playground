@@ -4,7 +4,7 @@ fun main() {
     println(findIliyan())
 }
 
-fun findPerson(predicate: (Person) -> Boolean): Person? {
+fun findPerson(condition: (Person) -> Boolean): Person? {
     val people = listOf(
         Person("Alice"),
         Person("dsa"),
@@ -13,7 +13,7 @@ fun findPerson(predicate: (Person) -> Boolean): Person? {
     )
 
     for (person in people) {
-        if (predicate(person)) {
+        if (condition(person)) {
             return person
         }
     }
