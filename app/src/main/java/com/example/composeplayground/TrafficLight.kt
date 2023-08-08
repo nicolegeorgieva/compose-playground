@@ -1,5 +1,6 @@
 package com.example.composeplayground
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -33,12 +34,16 @@ fun TrafficLight() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         var trafficLightColor by rememberSaveable { mutableStateOf(TrafficLightColor.RED) }
+        var countdownKey by rememberSaveable { mutableStateOf(0) }
 
-        LaunchedEffect(Unit) {
+        LaunchedEffect(countdownKey) {
+            trafficLightColor = TrafficLightColor.RED
             delay(1000)
             trafficLightColor = TrafficLightColor.YELLOW
             delay(1000)
             trafficLightColor = TrafficLightColor.GREEN
+            delay(1000)
+            countdownKey++
         }
 
         TrafficLightColor(
@@ -69,8 +74,9 @@ fun TrafficLightColor(color: Color, selected: Boolean) {
         onClick = { /*TODO*/ },
         shape = CircleShape,
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (selected) color else color.copy(0.5f)
-        )
+            containerColor = if (selected) color else color.copy(0.3f)
+        ),
+        border = BorderStroke(width = 2.dp, color = Color.Black)
     ) {}
 }
 
