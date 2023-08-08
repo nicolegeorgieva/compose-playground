@@ -26,22 +26,38 @@ fun FindTheGift() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        var squares by rememberSaveable { mutableStateOf(6) }
+        var squares by rememberSaveable { mutableStateOf(9) }
 
-        Row {
-            if (squares > 3) {
-                if (squares % 2 == 0) {
+        if (squares <= 3) {
+            Row {
+                SquareElement(onClick = {})
+            }
+        } else {
+            if (squares % 2 == 0) {
+                if (squares % 3 == 0) {
                     for (i in 1..squares / 2) {
-                        SquareElement(onClick = {})
+                        Row {
+                            for (i in 1..squares / 3) {
+                                SquareElement(onClick = {})
+                            }
+                        }
                     }
                 } else {
-                    for (i in 1..squares / 3) {
-                        SquareElement(onClick = {})
+                    for (i in 1..squares / 2) {
+                        Row {
+                            for (i in 1..squares / 2) {
+                                SquareElement(onClick = {})
+                            }
+                        }
                     }
                 }
             } else {
-                for (i in 1..squares) {
-                    SquareElement(onClick = {})
+                for (i in 1..squares / 3) {
+                    Row {
+                        for (i in 1..squares / 3) {
+                            SquareElement(onClick = {})
+                        }
+                    }
                 }
             }
         }
