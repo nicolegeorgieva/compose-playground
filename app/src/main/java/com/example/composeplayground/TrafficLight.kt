@@ -22,8 +22,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 
-enum class TrafficLightColor {
-    RED, YELLOW, GREEN
+enum class TrafficLightColor(val color: Color) {
+    RED(Color.Red), YELLOW(Color.Yellow), GREEN(Color.Green)
 }
 
 @Composable
@@ -37,33 +37,20 @@ fun TrafficLight() {
         var countdownKey by rememberSaveable { mutableStateOf(0) }
 
         LaunchedEffect(countdownKey) {
-            trafficLightColor = TrafficLightColor.RED
-            delay(1000)
-            trafficLightColor = TrafficLightColor.YELLOW
-            delay(1000)
-            trafficLightColor = TrafficLightColor.GREEN
-            delay(1000)
+            TrafficLightColor.values().forEach {
+                trafficLightColor = it
+                delay(1_000)
+            }
             countdownKey++
         }
 
-        TrafficLightColor(
-            color = Color.Red,
-            selected = trafficLightColor == TrafficLightColor.RED
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        TrafficLightColor(
-            color = Color.Yellow,
-            selected = trafficLightColor == TrafficLightColor.YELLOW
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        TrafficLightColor(
-            color = Color.Green,
-            selected = trafficLightColor == TrafficLightColor.GREEN
-        )
+        for (light in TrafficLightColor.values()) {
+            TrafficLightColor(
+                color = light.color,
+                selected = light == trafficLightColor
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+        }
     }
 }
 
