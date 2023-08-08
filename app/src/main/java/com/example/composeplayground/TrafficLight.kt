@@ -42,28 +42,30 @@ fun TrafficLight() {
             trafficLightColor = TrafficLightColor.GREEN
         }
 
-        when (trafficLightColor) {
-            TrafficLightColor.RED -> {
-                TrafficLightColor(
-                    color = ButtonDefaults.buttonColors(containerColor = Color.Red)
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-            }
+        TrafficLightColor(
+            color = ButtonDefaults.buttonColors(
+                containerColor = if (trafficLightColor == TrafficLightColor.RED)
+                    Color.Red else Color.Red.copy(0.5F)
+            )
+        )
 
-            TrafficLightColor.YELLOW -> {
-                TrafficLightColor(
-                    color = ButtonDefaults.buttonColors(containerColor = Color.Yellow)
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-            }
+        Spacer(modifier = Modifier.height(8.dp))
 
-            TrafficLightColor.GREEN -> {
-                TrafficLightColor(
-                    color = ButtonDefaults.buttonColors(containerColor = Color.Green)
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-        }
+        TrafficLightColor(
+            color = ButtonDefaults.buttonColors(
+                containerColor = if (trafficLightColor == TrafficLightColor.YELLOW)
+                    Color.Yellow else Color.Yellow.copy(0.5F)
+            )
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        TrafficLightColor(
+            color = ButtonDefaults.buttonColors(
+                containerColor = if (trafficLightColor == TrafficLightColor.GREEN)
+                    Color.Green else Color.Green.copy(0.5F)
+            )
+        )
     }
 }
 
