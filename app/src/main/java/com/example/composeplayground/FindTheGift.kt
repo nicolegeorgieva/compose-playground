@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,7 +25,7 @@ fun FindTheGift() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        var squares by rememberSaveable { mutableStateOf(9) }
+        val squares by rememberSaveable { mutableStateOf(9) }
 
         if (squares <= 3) {
             Row {
@@ -37,7 +36,7 @@ fun FindTheGift() {
                 if (squares % 3 == 0) {
                     for (i in 1..squares / 2) {
                         Row {
-                            for (i in 1..squares / 3) {
+                            for (y in 1..squares / 3) {
                                 SquareElement(onClick = {})
                             }
                         }
@@ -45,7 +44,7 @@ fun FindTheGift() {
                 } else {
                     for (i in 1..squares / 2) {
                         Row {
-                            for (i in 1..squares / 2) {
+                            for (y in 1..squares / 2) {
                                 SquareElement(onClick = {})
                             }
                         }
@@ -54,7 +53,7 @@ fun FindTheGift() {
             } else {
                 for (i in 1..squares / 3) {
                     Row {
-                        for (i in 1..squares / 3) {
+                        for (y in 1..squares / 3) {
                             SquareElement(onClick = {})
                         }
                     }
