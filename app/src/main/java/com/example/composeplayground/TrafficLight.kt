@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -43,39 +42,35 @@ fun TrafficLight() {
         }
 
         TrafficLightColor(
-            color = ButtonDefaults.buttonColors(
-                containerColor = if (trafficLightColor == TrafficLightColor.RED)
-                    Color.Red else Color.Red.copy(0.5F)
-            )
+            color = Color.Red,
+            selected = trafficLightColor == TrafficLightColor.RED
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         TrafficLightColor(
-            color = ButtonDefaults.buttonColors(
-                containerColor = if (trafficLightColor == TrafficLightColor.YELLOW)
-                    Color.Yellow else Color.Yellow.copy(0.5F)
-            )
+            color = Color.Yellow,
+            selected = trafficLightColor == TrafficLightColor.YELLOW
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         TrafficLightColor(
-            color = ButtonDefaults.buttonColors(
-                containerColor = if (trafficLightColor == TrafficLightColor.GREEN)
-                    Color.Green else Color.Green.copy(0.5F)
-            )
+            color = Color.Green,
+            selected = trafficLightColor == TrafficLightColor.GREEN
         )
     }
 }
 
 @Composable
-fun TrafficLightColor(color: ButtonColors) {
+fun TrafficLightColor(color: Color, selected: Boolean) {
     Button(
         modifier = Modifier.size(64.dp),
         onClick = { /*TODO*/ },
         shape = CircleShape,
-        colors = color
+        colors = ButtonDefaults.buttonColors(
+            containerColor = if (selected) color else color.copy(0.5f)
+        )
     ) {}
 }
 
