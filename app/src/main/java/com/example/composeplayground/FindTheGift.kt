@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,10 +41,17 @@ fun FindTheGift() {
         Spacer(modifier = Modifier.height(12.dp))
 
         val squares by rememberSaveable { mutableStateOf(9) }
+        var earnGift by rememberSaveable { mutableStateOf(false) }
+        var hasAnswered by rememberSaveable { mutableStateOf(false) }
 
         if (squares <= 3) {
             Row {
-                SquareElement(onClick = {})
+                for (i in 1..squares) {
+                    SquareElement(onClick = {
+                        earnGift = i == 1
+                        hasAnswered = true
+                    })
+                }
             }
         } else {
             if (squares % 2 == 0) {
@@ -51,7 +59,10 @@ fun FindTheGift() {
                     for (i in 1..squares / 2) {
                         Row {
                             for (y in 1..squares / 3) {
-                                SquareElement(onClick = {})
+                                SquareElement(onClick = {
+                                    earnGift = y == 1
+                                    hasAnswered = true
+                                })
                             }
                         }
                     }
@@ -59,7 +70,10 @@ fun FindTheGift() {
                     for (i in 1..squares / 2) {
                         Row {
                             for (y in 1..squares / 2) {
-                                SquareElement(onClick = {})
+                                SquareElement(onClick = {
+                                    earnGift = y == 1
+                                    hasAnswered = true
+                                })
                             }
                         }
                     }
@@ -68,10 +82,23 @@ fun FindTheGift() {
                 for (i in 1..squares / 3) {
                     Row {
                         for (y in 1..squares / 3) {
-                            SquareElement(onClick = {})
+                            SquareElement(onClick = {
+                                earnGift = y == 1
+                                hasAnswered = true
+                            })
                         }
                     }
                 }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        if (hasAnswered) {
+            if (!earnGift) {
+                Text(text = "Sorry there's no gift under that square.")
+            } else {
+                Text(text = "Congrats you've found the gift!")
             }
         }
     }
