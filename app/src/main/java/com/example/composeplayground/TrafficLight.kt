@@ -10,10 +10,16 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
 
 @Composable
 fun TrafficLight() {
@@ -22,26 +28,42 @@ fun TrafficLight() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        LightColor(
-            color = ButtonDefaults.buttonColors(containerColor = Color.Red)
-        )
+        var trafficLightColor by rememberSaveable { mutableStateOf(1) }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        LaunchedEffect(Unit) {
+            delay(1000)
+            trafficLightColor = 2
+            delay(1000)
+            trafficLightColor = 3
+        }
 
-        LightColor(
-            color = ButtonDefaults.buttonColors(containerColor = Color.Yellow)
-        )
+        when (trafficLightColor) {
+            1 -> {
+                TrafficLightColor(
+                    color = ButtonDefaults.buttonColors(containerColor = Color.Red)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
 
-        Spacer(modifier = Modifier.height(8.dp))
+            2 -> {
+                TrafficLightColor(
+                    color = ButtonDefaults.buttonColors(containerColor = Color.Yellow)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
 
-        LightColor(
-            color = ButtonDefaults.buttonColors(containerColor = Color.Green)
-        )
+            3 -> {
+                TrafficLightColor(
+                    color = ButtonDefaults.buttonColors(containerColor = Color.Green)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+        }
     }
 }
 
 @Composable
-fun LightColor(color: ButtonColors) {
+fun TrafficLightColor(color: ButtonColors) {
     Button(
         onClick = { /*TODO*/ },
         shape = CircleShape,
