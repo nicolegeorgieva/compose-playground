@@ -22,6 +22,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 
+enum class TrafficLightColor {
+    RED, YELLOW, GREEN
+}
+
 @Composable
 fun TrafficLight() {
     Column(
@@ -29,31 +33,31 @@ fun TrafficLight() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        var trafficLightColor by rememberSaveable { mutableStateOf(1) }
+        var trafficLightColor by rememberSaveable { mutableStateOf(TrafficLightColor.RED) }
 
         LaunchedEffect(Unit) {
             delay(1000)
-            trafficLightColor = 2
+            trafficLightColor = TrafficLightColor.YELLOW
             delay(1000)
-            trafficLightColor = 3
+            trafficLightColor = TrafficLightColor.GREEN
         }
 
         when (trafficLightColor) {
-            1 -> {
+            TrafficLightColor.RED -> {
                 TrafficLightColor(
                     color = ButtonDefaults.buttonColors(containerColor = Color.Red)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
             }
 
-            2 -> {
+            TrafficLightColor.YELLOW -> {
                 TrafficLightColor(
                     color = ButtonDefaults.buttonColors(containerColor = Color.Yellow)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
             }
 
-            3 -> {
+            TrafficLightColor.GREEN -> {
                 TrafficLightColor(
                     color = ButtonDefaults.buttonColors(containerColor = Color.Green)
                 )
