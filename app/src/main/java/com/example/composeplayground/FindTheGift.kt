@@ -48,6 +48,7 @@ fun FindTheGift() {
         val squares by rememberSaveable { mutableStateOf(9) }
         val earnGift = rememberSaveable { mutableStateOf(false) }
         var hasAnswered by rememberSaveable { mutableStateOf(false) }
+        var selected by rememberSaveable { mutableStateOf(false) }
 
         if (squares <= 3) {
             Row {
@@ -56,8 +57,9 @@ fun FindTheGift() {
                         onClick = {
                             earnGift.value = i == 1
                             hasAnswered = true
+                            selected = true
                         },
-                        selected = hasAnswered,
+                        selected = selected,
                         earnGift = earnGift
                     )
                 }
@@ -72,8 +74,9 @@ fun FindTheGift() {
                                     onClick = {
                                         earnGift.value = y == 1
                                         hasAnswered = true
+                                        selected = true
                                     },
-                                    selected = hasAnswered,
+                                    selected = selected,
                                     earnGift = earnGift
                                 )
                             }
@@ -87,8 +90,9 @@ fun FindTheGift() {
                                     onClick = {
                                         earnGift.value = y == 1
                                         hasAnswered = true
+                                        selected = true
                                     },
-                                    selected = hasAnswered,
+                                    selected = selected,
                                     earnGift = earnGift
                                 )
                             }
@@ -103,8 +107,9 @@ fun FindTheGift() {
                                 onClick = {
                                     earnGift.value = y == 1
                                     hasAnswered = true
+                                    selected = true
                                 },
-                                selected = hasAnswered,
+                                selected = selected,
                                 earnGift = earnGift
                             )
                         }
