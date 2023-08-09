@@ -11,10 +11,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,11 +42,24 @@ fun FindTheMatching() {
 
         val rows = 3
         val itemsPerRow = 4
+        var clicked by rememberSaveable { mutableStateOf(false) }
 
         for (i in 1..rows) {
             Row {
                 for (y in 1..itemsPerRow) {
-                    SquareItem(icon = Icons.Filled.Lock, contentDescription = "Lock")
+                    if (!clicked) {
+                        SquareItem(
+                            icon = Icons.Filled.Lock,
+                            contentDescription = "Lock",
+                            onClick = { clicked = true }
+                        )
+                    } else {
+                        SquareItem(
+                            icon = Icons.Filled.ShoppingCart,
+                            contentDescription = "Shopping Cart",
+                            onClick = { clicked = false }
+                        )
+                    }
                 }
             }
         }
@@ -49,12 +67,12 @@ fun FindTheMatching() {
 }
 
 @Composable
-fun SquareItem(icon: ImageVector, contentDescription: String) {
+fun SquareItem(icon: ImageVector, contentDescription: String, onClick: () -> Unit) {
     Button(
         modifier = Modifier
             .size(64.dp),
         onClick = {
-            /* doSomething() */
+            onClick()
         },
         shape = RectangleShape,
         border = BorderStroke(width = 2.dp, color = Color.Black)
