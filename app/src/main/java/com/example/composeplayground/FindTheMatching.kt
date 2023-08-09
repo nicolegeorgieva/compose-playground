@@ -53,8 +53,6 @@ fun FindTheMatching() {
         val itemsPerRow = 4
         val clicked = rememberSaveable { mutableStateOf(false) }
 
-        val wholeGrid = listOf<Item>(firstRow)
-
         val firstRow = listOf<Item>(
             Item(Icons.Filled.ShoppingCart, "Shopping Cart"),
             Item(Icons.Filled.Clear, "Clear"),
