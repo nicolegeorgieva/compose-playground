@@ -53,21 +53,15 @@ fun FindTheMatching() {
         val itemsPerRow = 4
         val clicked = rememberSaveable { mutableStateOf(false) }
 
-        val firstRow = listOf<Item>(
+        val grid = listOf(
             Item(Icons.Filled.ShoppingCart, "Shopping Cart"),
             Item(Icons.Filled.Clear, "Clear"),
             Item(Icons.Filled.Done, "Done"),
-            Item(Icons.Filled.Favorite, "Favorite")
-        )
-
-        val secondRow = listOf<Item>(
+            Item(Icons.Filled.Favorite, "Favorite"),
             Item(Icons.Filled.Favorite, "Favorite"),
             Item(Icons.Filled.Clear, "Clear"),
             Item(Icons.Filled.ShoppingCart, "Shopping Cart"),
-            Item(Icons.Filled.Done, "Done")
-        )
-
-        val thirdRow = listOf<Item>(
+            Item(Icons.Filled.Done, "Done"),
             Item(Icons.Filled.Face, "Face"),
             Item(Icons.Filled.Info, "Info"),
             Item(Icons.Filled.Info, "Info"),
@@ -77,13 +71,15 @@ fun FindTheMatching() {
         for (i in 1..rows) {
             Row {
                 if (!clicked.value) {
-                    SquareItem(
-                        icon = Icons.Filled.Lock,
-                        contentDescription = "Lock",
-                        onClick = clicked
-                    )
+                    for (y in 1..itemsPerRow) {
+                        SquareItem(
+                            icon = Icons.Filled.Lock,
+                            contentDescription = "Lock",
+                            onClick = clicked
+                        )
+                    }
                 } else {
-                    for (y in firstRow) {
+                    for (y in grid) {
                         SquareItem(
                             icon = y.icon,
                             contentDescription = y.contentDescription,
