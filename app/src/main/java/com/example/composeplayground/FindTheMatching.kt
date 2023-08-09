@@ -3,6 +3,7 @@ package com.example.composeplayground
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -32,9 +33,18 @@ fun FindTheMatching() {
     ) {
         Text(text = "Welcome to find the matching game!")
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
-        SquareItem(icon = Icons.Filled.Lock, contentDescription = "Lock")
+        val rows = 3
+        val itemsPerRow = 4
+
+        for (i in 1..rows) {
+            Row {
+                for (y in 1..itemsPerRow) {
+                    SquareItem(icon = Icons.Filled.Lock, contentDescription = "Lock")
+                }
+            }
+        }
     }
 }
 
