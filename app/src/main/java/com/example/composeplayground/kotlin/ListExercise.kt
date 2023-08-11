@@ -7,7 +7,7 @@ fun main() {
 
     println(mutableList)
 
-    var immutableList = listOf(5, 6, 7)
+    val immutableList = listOf(5, 6, 7)
     var sorted = immutableList.filter { it != 7 } + 3
     sorted = sorted.sorted()
 
