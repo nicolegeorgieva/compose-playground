@@ -1,7 +1,7 @@
 package com.example.composeplayground.kotlin
 
 fun main() {
-    val dog1 = Dog(name = "Rex", weight_param = 100, breed_param = "german shepherd")
+    val dog1 = Dog(name = "Rex", weightParam = 100, breedParam = "german shepherd")
     println(dog1.activities.toList().joinToString(" "))
     dog1.weight = -2
     println(dog1.weightInKgs)
@@ -10,8 +10,8 @@ fun main() {
 
 class Dog(
     val name: String,
-    val weight_param: Int,
-    val breed_param: String
+    val weightParam: Int,
+    val breedParam: String
 ) {
     init {
         println("Dog $name has been created. ")
@@ -19,13 +19,13 @@ class Dog(
 
     var activities = arrayOf("Walks")
 
-    val breed = breed_param.uppercase()
+    val breed = breedParam.uppercase()
 
     init {
         println("The breed is $breed.")
     }
 
-    var weight = weight_param
+    var weight = weightParam
         set(value) {
             if (value > 0) field = value
         }
