@@ -15,6 +15,7 @@ fun main() {
     wolf.makeNoise()
     println(wolf.hi)
     wolf.eat()
+    wolf.run()
 
     Vet().giveMedicine(Wolf(Tail()))
 }
@@ -39,6 +40,10 @@ class Wolf(val tail: Tail) : Canine() {
     override fun eat() {
         super.eat()
         println("dksadas")
+    }
+
+    fun run() {
+        println("fdsfs")
     }
 }
 
