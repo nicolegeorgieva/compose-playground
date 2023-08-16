@@ -30,6 +30,13 @@ fun Calculator() {
 
         val input = rememberSaveable { mutableStateOf("") }
         val hasTyped = rememberSaveable { mutableStateOf(false) }
+        val buttonTexts = listOf(
+            "C", "%", "X", "/",
+            "7", "8", "9", "*",
+            "4", "5", "6", "-",
+            "1", "2", "3", "+",
+            "", "0", ".", "="
+        )
 
         if (!hasTyped.value) {
             Text(text = "")
@@ -43,24 +50,63 @@ fun Calculator() {
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        CalculatorGrid(input = input, hasTyped = hasTyped)
+        CalculatorGrid(input = input, buttonText = buttonTexts, hasTyped = hasTyped)
     }
 }
 
 @Composable
-fun CalculatorGrid(input: MutableState<String>, hasTyped: MutableState<Boolean>) {
-    val rows = 5
-    val itemsPerRow = 4
-
-    for (i in 1..rows) {
-        Row {
-            for (y in 1..itemsPerRow) {
-                CalculatorButton(text = "1", hasTyped = hasTyped) {
-                    input.value += 1
-                }
-
-                Spacer(modifier = Modifier.width(4.dp))
+fun CalculatorGrid(
+    input: MutableState<String>,
+    buttonText: List<String>,
+    hasTyped: MutableState<Boolean>
+) {
+    Row {
+        for (y in 0 until 4) {
+            CalculatorButton(text = buttonText[y], hasTyped = hasTyped) {
+                input.value += buttonText[y]
             }
+
+            Spacer(modifier = Modifier.width(4.dp))
+        }
+    }
+
+    Row {
+        for (y in 4 until 8) {
+            CalculatorButton(text = buttonText[y], hasTyped = hasTyped) {
+                input.value += buttonText[y]
+            }
+
+            Spacer(modifier = Modifier.width(4.dp))
+        }
+    }
+
+    Row {
+        for (y in 8 until 12) {
+            CalculatorButton(text = buttonText[y], hasTyped = hasTyped) {
+                input.value += buttonText[y]
+            }
+
+            Spacer(modifier = Modifier.width(4.dp))
+        }
+    }
+
+    Row {
+        for (y in 12 until 16) {
+            CalculatorButton(text = buttonText[y], hasTyped = hasTyped) {
+                input.value += buttonText[y]
+            }
+
+            Spacer(modifier = Modifier.width(4.dp))
+        }
+    }
+
+    Row {
+        for (y in 16 until 20) {
+            CalculatorButton(text = buttonText[y], hasTyped = hasTyped) {
+                input.value += buttonText[y]
+            }
+
+            Spacer(modifier = Modifier.width(4.dp))
         }
     }
 }
