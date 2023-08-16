@@ -39,7 +39,7 @@ open class Animal(open val hi: String = "4") {
     }
 }
 
-open class Hippo(override val hi: String = "JJJ") : Animal(hi) {
+open class Hippo(override val hi: String = "JJJ") : Animal() {
     override val image = "hippo.jpg"
     override val food = "grass"
     override val habitat = "water"
@@ -49,6 +49,6 @@ open class Hippo(override val hi: String = "JJJ") : Animal(hi) {
     }
 }
 
-class ZooHippo(hi: String = "dsds") : Hippo(hi) {
+class ZooHippo(override val hi: String = "dsds") : Hippo() {
     override val image = "zoo-hippo.jpg"
 }
