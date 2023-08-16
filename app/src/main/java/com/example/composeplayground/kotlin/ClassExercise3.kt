@@ -6,9 +6,10 @@ fun main() {
     println(hippo1.hunger)
     println(hippo1.image)
     hippo1.makeNoise()
+    println(hippo1.hi)
 }
 
-open class Animal {
+open class Animal(open val hi: String = "4") {
     open val image = ""
     open val food = ""
     open val habitat = ""
@@ -31,8 +32,12 @@ open class Animal {
     }
 }
 
-class Hippo : Animal() {
+class Hippo(override val hi: String = "JJJ") : Animal(hi) {
     override val image = "hippo.jpg"
     override val food = "grass"
     override val habitat = "water"
+
+    override fun makeNoise() {
+        println("Grunt! Grunt!")
+    }
 }
