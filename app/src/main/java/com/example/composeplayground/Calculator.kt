@@ -29,7 +29,7 @@ fun Calculator() {
         val input = rememberSaveable { mutableStateOf("") }
         val hasTyped = rememberSaveable { mutableStateOf(false) }
         val buttonTexts = listOf(
-            "C", "%", "X", "/",
+            "C", "", "X", "/",
             "7", "8", "9", "*",
             "4", "5", "6", "-",
             "1", "2", "3", "+",
@@ -104,9 +104,28 @@ fun CalculatorButtonsRow(
     input: MutableState<String>,
 ) {
     Row {
-        for (y in from until to) {
-            CalculatorButton(text = buttonText[y], hasTyped = hasTyped) {
-                input.value += buttonText[y]
+        for (i in from until to) {
+            CalculatorButton(text = buttonText[i], hasTyped = hasTyped) {
+                when (buttonText[i]) {
+                    "C" -> input.value = ""
+                    "X" -> input.value = input.value.dropLast(1)
+                    "/" -> input.value += "/"
+                    "7" -> input.value += "7"
+                    "8" -> input.value += "8"
+                    "9" -> input.value += "9"
+                    "*" -> input.value += "*"
+                    "4" -> input.value += "4"
+                    "5" -> input.value += "5"
+                    "6" -> input.value += "6"
+                    "-" -> input.value += "-"
+                    "1" -> input.value += "1"
+                    "2" -> input.value += "2"
+                    "3" -> input.value += "3"
+                    "+" -> input.value += "+"
+                    "0" -> input.value += "0"
+                    "." -> input.value += "."
+                    "=" -> input.value += "="
+                }
             }
 
             Spacer(modifier = Modifier.width(4.dp))
