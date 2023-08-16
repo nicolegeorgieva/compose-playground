@@ -15,7 +15,9 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.notkamui.keval.Keval
 
 @Composable
@@ -36,6 +38,7 @@ fun Calculator() {
         }
 
         val hasTyped = rememberSaveable { mutableStateOf(false) }
+        val isFinalized = rememberSaveable { mutableStateOf(false) }
         val buttonTexts = listOf(
             "C", "%", "X", "/",
             "7", "8", "9", "*",
@@ -48,13 +51,17 @@ fun Calculator() {
         if (!hasTyped.value) {
             Text(text = "")
         } else {
-            Text(text = input.value)
-        }
+            if (!isFinalized.value) {
+                Text(text = input.value)
 
-        Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
-        if (result != null) {
-            Text(text = "$result")
+                if (result != null) {
+                    Text(text = "$result")
+                }
+            } else {
+                Text(text = "$result", fontSize = 32.sp, fontWeight = FontWeight.Bold)
+            }
         }
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -66,8 +73,21 @@ fun Calculator() {
         CalculatorGrid(
             input = input,
             buttonText = buttonTexts,
-            hasTyped = hasTyped
+            hasTyped = hasTyped,
+            isFinalized = isFinalized
         )
+
+        Row {
+            CalculatorButton(text = buttonTexts[20], hasTyped = hasTyped) {
+                input.value += buttonTexts[20]
+            }
+
+            Spacer(modifier = Modifier.width(4.dp))
+
+            CalculatorButton(text = buttonTexts.last(), hasTyped = hasTyped) {
+                input.value += buttonTexts.last()
+            }
+        }
     }
 }
 
@@ -75,7 +95,8 @@ fun Calculator() {
 fun CalculatorGrid(
     input: MutableState<String>,
     buttonText: List<String>,
-    hasTyped: MutableState<Boolean>
+    hasTyped: MutableState<Boolean>,
+    isFinalized: MutableState<Boolean>
 ) {
     val rows = 5
 
@@ -87,7 +108,8 @@ fun CalculatorGrid(
             to = from + 4,
             buttonText = buttonText,
             hasTyped = hasTyped,
-            input = input
+            input = input,
+            isFinalized = isFinalized
         )
     }
 }
@@ -98,7 +120,8 @@ fun CalculatorButtonsRow(
     to: Int,
     buttonText: List<String>,
     hasTyped: MutableState<Boolean>,
-    input: MutableState<String>
+    input: MutableState<String>,
+    isFinalized: MutableState<Boolean>
 ) {
     Row {
         for (i in from until to) {
@@ -126,6 +149,7 @@ fun CalculatorButtonsRow(
                     "^" -> input.value += "^"
                     "0" -> input.value += "0"
                     "." -> input.value += "."
+                    "=" -> isFinalized.value = true
                 }
             }
 
