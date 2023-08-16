@@ -58,41 +58,19 @@ fun CalculatorGrid(
     buttonText: List<String>,
     hasTyped: MutableState<Boolean>
 ) {
-    CalculatorButtonsRow(
-        from = 0,
-        to = 4,
-        buttonText = buttonText,
-        hasTyped = hasTyped,
-        input = input
-    )
-    CalculatorButtonsRow(
-        from = 4,
-        to = 8,
-        buttonText = buttonText,
-        hasTyped = hasTyped,
-        input = input
-    )
-    CalculatorButtonsRow(
-        from = 8,
-        to = 12,
-        buttonText = buttonText,
-        hasTyped = hasTyped,
-        input = input
-    )
-    CalculatorButtonsRow(
-        from = 12,
-        to = 16,
-        buttonText = buttonText,
-        hasTyped = hasTyped,
-        input = input
-    )
-    CalculatorButtonsRow(
-        from = 16,
-        to = 20,
-        buttonText = buttonText,
-        hasTyped = hasTyped,
-        input = input
-    )
+    val rows = 5
+
+    for (i in 0 until rows) {
+        val from = i * 4
+
+        CalculatorButtonsRow(
+            from = from,
+            to = from + 4,
+            buttonText = buttonText,
+            hasTyped = hasTyped,
+            input = input
+        )
+    }
 }
 
 @Composable
