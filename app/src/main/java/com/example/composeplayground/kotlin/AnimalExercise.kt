@@ -14,6 +14,8 @@ fun main() {
     println(zooHippo.hi)
     zooHippo.roam()
     zooHippo.makeNoise()
+
+    println(ZooHippo2().hi)
 }
 
 open class Animal(open val hi: String = "4") {
@@ -49,6 +51,11 @@ open class Hippo(override val hi: String = "JJJ") : Animal() {
     }
 }
 
-class ZooHippo(override val hi: String = "dsds") : Hippo() {
+open class ZooHippo(override val hi: String = "dsds") : Hippo() {
     override val image = "zoo-hippo.jpg"
+}
+
+class ZooHippo2() : ZooHippo() {
+    override val image = "zoo-hippo2.jpg"
+    override val food = "zoo hippo food 2"
 }
