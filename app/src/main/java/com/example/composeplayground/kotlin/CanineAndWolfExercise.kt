@@ -1,8 +1,16 @@
 package com.example.composeplayground.kotlin
 
 fun main() {
+    val animals = listOf(Hippo(), Wolf(Tail()))
+    for (animal in animals) {
+        animal.makeNoise()
+        animal.roam()
+        animal.eat()
+    }
+
     val tail = Tail()
     val wolf = Wolf(tail)
+
     println(Wolf(tail = Tail()).x)
     wolf.makeNoise()
     println(wolf.hi)
