@@ -1,12 +1,13 @@
 package com.example.composeplayground
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Text
@@ -15,6 +16,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -60,32 +62,57 @@ fun Calculator() {
                     Text(text = "$result")
                 }
             } else {
-                Text(text = "$result", fontSize = 32.sp, fontWeight = FontWeight.Bold)
+                if (result != null) {
+                    Text(text = "$result", fontSize = 32.sp, fontWeight = FontWeight.Bold)
+                }
             }
         }
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        Divider()
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center
+        ) {
+            Divider()
 
-        Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
-        CalculatorGrid(
-            input = input,
-            buttonText = buttonTexts,
-            hasTyped = hasTyped,
-            isFinalized = isFinalized
-        )
+            CalculatorGrid(
+                input = input,
+                buttonText = buttonTexts,
+                hasTyped = hasTyped,
+                isFinalized = isFinalized
+            )
 
-        Row {
-            CalculatorButton(text = buttonTexts[20], hasTyped = hasTyped) {
-                input.value += buttonTexts[20]
-            }
+            Row {
+                CalculatorButton(text = buttonTexts[20], hasTyped = hasTyped) {
+                    input.value += buttonTexts[20]
+                }
 
-            Spacer(modifier = Modifier.width(4.dp))
+                Spacer(modifier = Modifier.weight(1f))
 
-            CalculatorButton(text = buttonTexts.last(), hasTyped = hasTyped) {
-                input.value += buttonTexts.last()
+                CalculatorButton(text = buttonTexts.last(), hasTyped = hasTyped) {
+                    input.value += buttonTexts.last()
+                }
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                CalculatorButton(
+                    text = buttonTexts.last(),
+                    hasTyped = hasTyped,
+                    isVisible = false
+                ) {}
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                CalculatorButton(
+                    text = buttonTexts.last(),
+                    hasTyped = hasTyped,
+                    isVisible = false
+                ) {}
+
+                Spacer(modifier = Modifier.weight(1f))
             }
         }
     }
@@ -111,6 +138,8 @@ fun CalculatorGrid(
             input = input,
             isFinalized = isFinalized
         )
+
+        Spacer(modifier = Modifier.height(12.dp))
     }
 }
 
@@ -153,14 +182,22 @@ fun CalculatorButtonsRow(
                 }
             }
 
-            Spacer(modifier = Modifier.width(4.dp))
+            Spacer(modifier = Modifier.weight(1f))
         }
     }
 }
 
 @Composable
-fun CalculatorButton(text: String, hasTyped: MutableState<Boolean>, operation: () -> Unit) {
+fun CalculatorButton(
+    text: String,
+    hasTyped: MutableState<Boolean>,
+    isVisible: Boolean = true,
+    operation: () -> Unit
+) {
     ElevatedButton(
+        modifier = Modifier
+            .size(64.dp)
+            .alpha(if (isVisible) 1f else 0f),
         onClick = {
             hasTyped.value = true
             operation()
