@@ -28,13 +28,13 @@ fun Calculator() {
     ) {
         Spacer(modifier = Modifier.height(12.dp))
 
-        var input by rememberSaveable { mutableStateOf(0) }
+        var input by rememberSaveable { mutableStateOf("") }
         val hasTyped = rememberSaveable { mutableStateOf(false) }
 
         if (!hasTyped.value) {
             Text(text = "")
         } else {
-            Text(text = "$input")
+            Text(text = input)
         }
 
         Spacer(modifier = Modifier.height(12.dp))
