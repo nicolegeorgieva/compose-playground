@@ -32,11 +32,11 @@ fun Calculator() {
         val hasTyped = rememberSaveable { mutableStateOf(false) }
         val doCalculation = remember { mutableStateOf(false) }
         val buttonTexts = listOf(
-            "C", "", "X", "/",
+            "C", "%", "X", "/",
             "7", "8", "9", "*",
             "4", "5", "6", "-",
             "1", "2", "3", "+",
-            "", "0", ".", "="
+            "^", "0", ".", "="
         )
 
         if (!hasTyped.value) {
@@ -104,6 +104,7 @@ fun CalculatorButtonsRow(
                 when (buttonText[i]) {
                     "C" -> input.value = ""
                     "X" -> input.value = input.value.dropLast(1)
+                    "%" -> input.value += "%"
                     "/" -> input.value += "/"
                     "7" -> input.value += "7"
                     "8" -> input.value += "8"
@@ -117,6 +118,7 @@ fun CalculatorButtonsRow(
                     "2" -> input.value += "2"
                     "3" -> input.value += "3"
                     "+" -> input.value += "+"
+                    "^" -> input.value += "^"
                     "0" -> input.value += "0"
                     "." -> input.value += "."
                     "=" -> doCalculation.value = true
