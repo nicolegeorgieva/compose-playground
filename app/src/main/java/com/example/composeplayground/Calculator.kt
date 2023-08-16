@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -18,7 +17,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Calculator() {
     Column(
@@ -60,48 +58,53 @@ fun CalculatorGrid(
     buttonText: List<String>,
     hasTyped: MutableState<Boolean>
 ) {
+    CalculatorButtonsRow(
+        from = 0,
+        to = 4,
+        buttonText = buttonText,
+        hasTyped = hasTyped,
+        input = input
+    )
+    CalculatorButtonsRow(
+        from = 4,
+        to = 8,
+        buttonText = buttonText,
+        hasTyped = hasTyped,
+        input = input
+    )
+    CalculatorButtonsRow(
+        from = 8,
+        to = 12,
+        buttonText = buttonText,
+        hasTyped = hasTyped,
+        input = input
+    )
+    CalculatorButtonsRow(
+        from = 12,
+        to = 16,
+        buttonText = buttonText,
+        hasTyped = hasTyped,
+        input = input
+    )
+    CalculatorButtonsRow(
+        from = 16,
+        to = 20,
+        buttonText = buttonText,
+        hasTyped = hasTyped,
+        input = input
+    )
+}
+
+@Composable
+fun CalculatorButtonsRow(
+    from: Int,
+    to: Int,
+    buttonText: List<String>,
+    hasTyped: MutableState<Boolean>,
+    input: MutableState<String>,
+) {
     Row {
-        for (y in 0 until 4) {
-            CalculatorButton(text = buttonText[y], hasTyped = hasTyped) {
-                input.value += buttonText[y]
-            }
-
-            Spacer(modifier = Modifier.width(4.dp))
-        }
-    }
-
-    Row {
-        for (y in 4 until 8) {
-            CalculatorButton(text = buttonText[y], hasTyped = hasTyped) {
-                input.value += buttonText[y]
-            }
-
-            Spacer(modifier = Modifier.width(4.dp))
-        }
-    }
-
-    Row {
-        for (y in 8 until 12) {
-            CalculatorButton(text = buttonText[y], hasTyped = hasTyped) {
-                input.value += buttonText[y]
-            }
-
-            Spacer(modifier = Modifier.width(4.dp))
-        }
-    }
-
-    Row {
-        for (y in 12 until 16) {
-            CalculatorButton(text = buttonText[y], hasTyped = hasTyped) {
-                input.value += buttonText[y]
-            }
-
-            Spacer(modifier = Modifier.width(4.dp))
-        }
-    }
-
-    Row {
-        for (y in 16 until 20) {
+        for (y in from until to) {
             CalculatorButton(text = buttonText[y], hasTyped = hasTyped) {
                 input.value += buttonText[y]
             }
