@@ -13,9 +13,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.notkamui.keval.Keval
 
 @Composable
 fun Calculator() {
@@ -28,6 +30,7 @@ fun Calculator() {
 
         val input = rememberSaveable { mutableStateOf("") }
         val hasTyped = rememberSaveable { mutableStateOf(false) }
+        val doCalculation = remember { mutableStateOf(false) }
         val buttonTexts = listOf(
             "C", "", "X", "/",
             "7", "8", "9", "*",
@@ -42,13 +45,24 @@ fun Calculator() {
             Text(text = input.value)
         }
 
+        if (doCalculation.value) {
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text(text = "${Keval.eval(input.value)}")
+        }
+
         Spacer(modifier = Modifier.height(12.dp))
 
         Divider()
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        CalculatorGrid(input = input, buttonText = buttonTexts, hasTyped = hasTyped)
+        CalculatorGrid(
+            input = input,
+            buttonText = buttonTexts,
+            hasTyped = hasTyped,
+            doCalculation = doCalculation
+        )
     }
 }
 
@@ -56,7 +70,8 @@ fun Calculator() {
 fun CalculatorGrid(
     input: MutableState<String>,
     buttonText: List<String>,
-    hasTyped: MutableState<Boolean>
+    hasTyped: MutableState<Boolean>,
+    doCalculation: MutableState<Boolean>
 ) {
     val rows = 5
 
@@ -68,7 +83,8 @@ fun CalculatorGrid(
             to = from + 4,
             buttonText = buttonText,
             hasTyped = hasTyped,
-            input = input
+            input = input,
+            doCalculation = doCalculation
         )
     }
 }
@@ -80,6 +96,7 @@ fun CalculatorButtonsRow(
     buttonText: List<String>,
     hasTyped: MutableState<Boolean>,
     input: MutableState<String>,
+    doCalculation: MutableState<Boolean>
 ) {
     Row {
         for (i in from until to) {
@@ -102,7 +119,7 @@ fun CalculatorButtonsRow(
                     "+" -> input.value += "+"
                     "0" -> input.value += "0"
                     "." -> input.value += "."
-                    "=" -> input.value += "="
+                    "=" -> doCalculation.value = true
                 }
             }
 
