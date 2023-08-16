@@ -7,6 +7,8 @@ fun main() {
     wolf.makeNoise()
     println(wolf.hi)
     wolf.eat()
+
+    Vet().giveMedicine(Wolf(Tail()))
 }
 
 open class Canine(override val hi: String = "j") : Animal() {
@@ -34,4 +36,10 @@ class Wolf(val tail: Tail) : Canine() {
 
 class Tail() {
     val length = 50
+}
+
+class Vet {
+    fun giveMedicine(animal: Animal) {
+        animal.makeNoise()
+    }
 }
