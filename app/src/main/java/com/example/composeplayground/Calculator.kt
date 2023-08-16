@@ -13,7 +13,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -29,14 +28,21 @@ fun Calculator() {
         Spacer(modifier = Modifier.height(12.dp))
 
         val input = rememberSaveable { mutableStateOf("") }
+
+        val result = try {
+            Keval.eval(input.value)
+        } catch (e: Exception) {
+            null
+        }
+
         val hasTyped = rememberSaveable { mutableStateOf(false) }
-        val doCalculation = remember { mutableStateOf(false) }
         val buttonTexts = listOf(
             "C", "%", "X", "/",
             "7", "8", "9", "*",
             "4", "5", "6", "-",
             "1", "2", "3", "+",
-            "^", "0", ".", "="
+            "^", "0", ".", "=",
+            "(", ")"
         )
 
         if (!hasTyped.value) {
@@ -45,10 +51,10 @@ fun Calculator() {
             Text(text = input.value)
         }
 
-        if (doCalculation.value) {
-            Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
-            Text(text = "${Keval.eval(input.value)}")
+        if (result != null) {
+            Text(text = "$result")
         }
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -60,8 +66,7 @@ fun Calculator() {
         CalculatorGrid(
             input = input,
             buttonText = buttonTexts,
-            hasTyped = hasTyped,
-            doCalculation = doCalculation
+            hasTyped = hasTyped
         )
     }
 }
@@ -70,8 +75,7 @@ fun Calculator() {
 fun CalculatorGrid(
     input: MutableState<String>,
     buttonText: List<String>,
-    hasTyped: MutableState<Boolean>,
-    doCalculation: MutableState<Boolean>
+    hasTyped: MutableState<Boolean>
 ) {
     val rows = 5
 
@@ -83,8 +87,7 @@ fun CalculatorGrid(
             to = from + 4,
             buttonText = buttonText,
             hasTyped = hasTyped,
-            input = input,
-            doCalculation = doCalculation
+            input = input
         )
     }
 }
@@ -95,14 +98,16 @@ fun CalculatorButtonsRow(
     to: Int,
     buttonText: List<String>,
     hasTyped: MutableState<Boolean>,
-    input: MutableState<String>,
-    doCalculation: MutableState<Boolean>
+    input: MutableState<String>
 ) {
     Row {
         for (i in from until to) {
             CalculatorButton(text = buttonText[i], hasTyped = hasTyped) {
                 when (buttonText[i]) {
-                    "C" -> input.value = ""
+                    "C" -> {
+                        input.value = ""
+                    }
+
                     "X" -> input.value = input.value.dropLast(1)
                     "%" -> input.value += "%"
                     "/" -> input.value += "/"
@@ -121,7 +126,6 @@ fun CalculatorButtonsRow(
                     "^" -> input.value += "^"
                     "0" -> input.value += "0"
                     "." -> input.value += "."
-                    "=" -> doCalculation.value = true
                 }
             }
 
