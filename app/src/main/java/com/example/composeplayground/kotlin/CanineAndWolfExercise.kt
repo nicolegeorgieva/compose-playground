@@ -20,7 +20,7 @@ fun main() {
     Vet().giveMedicine(Wolf(Tail()))
 }
 
-open class Canine(override val hi: String = "j") : Animal() {
+abstract class Canine(override val hi: String = "j") : Animal() {
     override fun roam() {
         println("The Canine is roaming")
     }
@@ -38,8 +38,12 @@ class Wolf(val tail: Tail) : Canine() {
     }
 
     override fun eat() {
-        super.eat()
         println("dksadas")
+    }
+
+    override fun roam() {
+        super.roam()
+        println("In the forests.")
     }
 
     fun run() {
