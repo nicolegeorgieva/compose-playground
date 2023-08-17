@@ -41,6 +41,10 @@ class Wolf(val tail: Tail) : Canine() {
         println("dksadas")
     }
 
+    override fun so() {
+        println("So is this implemented")
+    }
+
     override fun roam() {
         super.roam()
         println("In the forests.")

@@ -18,7 +18,7 @@ fun main() {
     println(ZooHippo2().hi)
 }
 
-abstract class Animal(open val hi: String = "4") {
+abstract class Animal(open val hi: String = "4") : Roamable {
     abstract val image: String
     abstract val food: String
     abstract val habitat: String
@@ -28,7 +28,7 @@ abstract class Animal(open val hi: String = "4") {
 
     abstract fun eat()
 
-    open fun roam() {
+    override fun roam() {
         println("The animal is roaming.")
     }
 
@@ -48,6 +48,10 @@ open class Hippo(override val hi: String = "JJJ") : Animal() {
 
     override fun eat() {
         println("Eating.")
+    }
+
+    override fun so() {
+        println("Implemented so")
     }
 }
 
