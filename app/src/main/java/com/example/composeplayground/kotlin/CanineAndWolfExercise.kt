@@ -1,11 +1,12 @@
 package com.example.composeplayground.kotlin
 
 fun main() {
-    val animals = listOf(Hippo(), Wolf(Tail()))
-    for (animal in animals) {
-        animal.makeNoise()
-        animal.roam()
-        animal.eat()
+    val roamables = listOf(Hippo(), Wolf(Tail()), Vehicle())
+    for (item in roamables) {
+        item.roam()
+        if (item is Animal) {
+            item.makeNoise()
+        }
     }
 
     val tail = Tail()
