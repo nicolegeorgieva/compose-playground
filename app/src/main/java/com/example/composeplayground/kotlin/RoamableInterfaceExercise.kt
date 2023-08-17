@@ -3,9 +3,10 @@ package com.example.composeplayground.kotlin
 fun main() {
     val vehicle = Vehicle()
     println(vehicle.velocity)
+    vehicle.so()
 }
 
-interface Roamable {
+interface Roamable : Jh {
     var velocity: Int
         get() = 20
         set(value) {
@@ -15,6 +16,10 @@ interface Roamable {
     fun roam()
 }
 
+interface Jh {
+    fun so()
+}
+
 class Vehicle : Roamable {
     override var velocity: Int
         get() = 30
@@ -22,5 +27,9 @@ class Vehicle : Roamable {
 
     override fun roam() {
         println("Roaming.")
+    }
+
+    override fun so() {
+        println("So")
     }
 }
