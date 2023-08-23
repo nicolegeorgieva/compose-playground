@@ -1,7 +1,9 @@
 package com.example.composeplayground
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -14,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
@@ -22,41 +25,49 @@ import androidx.compose.ui.unit.dp
 fun StateExercise2UI() {
     MyBack()
 
-    var isRegistered by rememberSaveable { mutableStateOf(false) }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        var isRegistered by rememberSaveable { mutableStateOf(false) }
 
-    if (!isRegistered) {
-        Column(modifier = Modifier.padding(12.dp)) {
-            var email by rememberSaveable { mutableStateOf("") }
-            var password by rememberSaveable { mutableStateOf("") }
+        if (!isRegistered) {
+            Column(modifier = Modifier.padding(12.dp)) {
+                var email by rememberSaveable { mutableStateOf("") }
+                var password by rememberSaveable { mutableStateOf("") }
 
-            OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
-                label = { Text("Email") }
-            )
+                OutlinedTextField(
+                    value = email,
+                    onValueChange = { email = it },
+                    label = { Text("Email") }
+                )
 
-            Spacer(modifier = Modifier.height(8.dp))
-
-            OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
-                label = { Text("Password") }
-            )
-
-            if (email.isNotBlank() && password.isNotBlank()) {
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Button(onClick = {
-                    isRegistered = true
-                }) {
-                    Text(text = "Register")
+                OutlinedTextField(
+                    value = password,
+                    onValueChange = { password = it },
+                    label = { Text("Password") }
+                )
+
+                if (email.isNotBlank() && password.isNotBlank()) {
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Button(onClick = {
+                        isRegistered = true
+                    }) {
+                        Text(text = "Register")
+                    }
                 }
             }
+        } else {
+            CircularProgressIndicator(
+                modifier = Modifier
+            )
         }
-    } else {
-        CircularProgressIndicator(
-            modifier = Modifier
-        )
     }
 }
 

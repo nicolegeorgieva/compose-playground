@@ -1,8 +1,10 @@
 package com.example.composeplayground
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -54,7 +56,13 @@ fun StoneScissorsPaper() {
 
     val winnerName = rememberSaveable { mutableStateOf("") }
 
-    Column(modifier = Modifier.padding(12.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
         if (!pressedStart) {
             PreStart(startBtnPressed = pressedStart, onStartBtnPressed = {
                 pressedStart = true
@@ -201,10 +209,12 @@ fun ChooseNumberOfPlayers(
         Text(text = "3")
     }
 
-    Spacer(modifier = Modifier.height(8.dp))
+    if (numberOfPlayers != null) {
+        Spacer(modifier = Modifier.height(8.dp))
 
-    Button(onClick = { onNumberOfPlayersChosen() }) {
-        Text(text = "Continue")
+        Button(onClick = { onNumberOfPlayersChosen() }) {
+            Text(text = "Continue")
+        }
     }
 }
 
