@@ -30,6 +30,8 @@ enum class TrafficLightColor(val color: Color, val delay: Long) {
 
 @Composable
 fun TrafficLight() {
+    MyBack()
+
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,

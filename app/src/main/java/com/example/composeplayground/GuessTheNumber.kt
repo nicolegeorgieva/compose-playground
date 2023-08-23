@@ -32,6 +32,8 @@ enum class Guess {
 
 @Composable
 fun GuessTheNumber() {
+    MyBack()
+
     var startPressed by rememberSaveable { mutableStateOf(false) }
     val timesGuessedCorrectly = rememberSaveable { mutableStateOf(0) }
     val quitPressed = rememberSaveable { mutableStateOf(false) }

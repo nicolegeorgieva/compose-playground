@@ -24,6 +24,8 @@ import com.notkamui.keval.Keval
 
 @Composable
 fun Calculator() {
+    MyBack()
+
     Column(
         modifier = Modifier
             .fillMaxSize()

@@ -1,8 +1,8 @@
 package com.example.composeplayground
 
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -11,6 +11,8 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun Countdown() {
+    MyBack()
+
     var text by rememberSaveable { mutableStateOf("5") }
 
     LaunchedEffect(Unit) {

@@ -34,6 +34,8 @@ enum class NumberOfPlayers {
 
 @Composable
 fun StoneScissorsPaper() {
+    MyBack()
+
     var pressedStart by rememberSaveable { mutableStateOf(false) }
     var chosenNumberOfPlayers by rememberSaveable { mutableStateOf(false) }
     var selectedNumberOfPlayers by rememberSaveable { mutableStateOf<NumberOfPlayers?>(null) }

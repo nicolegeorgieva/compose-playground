@@ -2,6 +2,7 @@ package com.example.composeplayground
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -24,6 +25,13 @@ sealed interface Screen {
     object StateExercise2 : Screen
     object StoneScissorsPaper : Screen
     object TrafficLight : Screen
+}
+
+@Composable
+fun MyBack(onBack: () -> Unit = { screenState.value = Screen.Menu }) {
+    BackHandler {
+        onBack()
+    }
 }
 
 class MainActivity : ComponentActivity() {
